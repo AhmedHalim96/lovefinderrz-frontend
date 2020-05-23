@@ -12,21 +12,22 @@
 			text-transform: capitalize;
 			color: $accent-color;
 		}
-
-		input {
-			padding: 0.5rem;
-			border: 0.1rem solid $accent-color;
-			border-radius: 0.1rem;
-			background-color: $bg-color;
-			color: $color-white;
-			.input-danger {
-				border-color: red;
-			}
-			font-size: 2rem;
-			color: white;
+	}
+	&__input {
+		padding: 0.5rem;
+		border: 0.1rem solid $accent-color;
+		border-radius: 0.6rem;
+		background-color: $bg-color;
+		color: $color-white;
+		font-size: 2rem;
+		&-danger {
+			border-color: $color-danger;
 		}
 	}
 
-	&__submit {
+	&__error {
+		animation-name: moveInBottom;
+		animation-duration: 0.5s;
+		animation-fill-mode: forwards;
 	}
 }

@@ -17,6 +17,9 @@ body {
 
 .paragraph {
 	font-size: $default-font-size;
+	&-danger {
+		color: $color-danger;
+	}
 }
 
 .link {
