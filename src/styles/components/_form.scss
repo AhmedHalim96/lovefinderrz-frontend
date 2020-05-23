@@ -1,0 +1,32 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+	&__group {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 1rem;
+
+		label {
+			font-size: 1.4rem;
+			text-transform: capitalize;
+			color: $accent-color;
+		}
+
+		input {
+			padding: 0.5rem;
+			border: 0.1rem solid $accent-color;
+			border-radius: 0.1rem;
+			background-color: $bg-color;
+			color: $color-white;
+			.input-danger {
+				border-color: red;
+			}
+			font-size: 2rem;
+			color: white;
+		}
+	}
+
+	&__submit {
+	}
+}

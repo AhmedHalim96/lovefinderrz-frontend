@@ -1,0 +1,30 @@
+body {
+	font-family: "Lato", sans-serif;
+	font-weight: 400;
+	/* font-size: 16px; */
+	line-height: 1.7;
+	color: $color-white;
+}
+
+.heading-primary {
+}
+
+.heading-secondary {
+}
+
+.heading-tertiary {
+}
+
+.paragraph {
+	font-size: $default-font-size;
+}
+
+.link {
+	color: $link-color;
+	text-decoration: none;
+
+	&:hover {
+		color: darken($color: $link-color, $amount: 10);
+		text-decoration: underline;
+	}
+}

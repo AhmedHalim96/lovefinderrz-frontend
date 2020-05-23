@@ -1,0 +1,30 @@
+.btn {
+	&,
+	&:visited {
+		color: white;
+		display: inline-block;
+		text-decoration: none;
+		font-size: $default-font-size;
+		padding: 1.2rem 4rem;
+		border-radius: 0.5rem;
+		font-weight: bold;
+		margin: 0.5rem;
+		background-color: darken($color: $accent-color, $amount: 20);
+		text-align: center;
+		// Changes for button element
+		border: none;
+		cursor: pointer;
+	}
+
+	&:active,
+	&:focus {
+		outline: none;
+		box-shadow: 0 0.5rem 1rem rgba($color-white, 0.1);
+	}
+
+	&:hover {
+		background-color: darken($color: $accent-color, $amount: 30);
+		color: $color-white;
+		box-shadow: 0 1rem 2rem rgba($color-black, 0.15);
+	}
+}

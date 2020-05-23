@@ -1,3 +1,15 @@
-@mixin bg-black {
-	background-color: #000000;
+@mixin center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin partial-line-after {
+	content: "";
+	border: 1px solid $accent-color;
+	width: 10em;
+	display: inline-block;
+	margin-top: 3rem;
+	@include center;
 }

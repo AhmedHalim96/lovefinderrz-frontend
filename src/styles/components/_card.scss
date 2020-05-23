@@ -1,0 +1,21 @@
+.card {
+	padding: 5rem;
+	border: 0.1rem $accent-color solid;
+	border-radius: 1rem;
+	display: inline-block;
+
+	&__header {
+		margin-bottom: 2rem;
+		position: relative;
+		&::after {
+			@include partial-line-after;
+		}
+	}
+	&__title {
+		font-size: 2rem;
+		letter-spacing: 0.1rem;
+		font-weight: 500;
+		text-align: center;
+		// margin-bottom: 1rem;
+	}
+}
