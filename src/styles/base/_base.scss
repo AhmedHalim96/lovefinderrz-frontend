@@ -7,7 +7,17 @@
 }
 
 html {
-	font-size: 62.5%;
+	@include respond(wide-desktop) {
+		font-size: 75%; // 1rem = 12px
+	}
+	font-size: 62.5%; // 1rem = 10px
+	@include respond(tab-land) {
+		font-size: 56.25%; // 1rem = 8px
+	}
+	@include respond(tab-port) {
+		font-size: 50%; // 1rem = 9px
+	}
+
 	font-family: Arial, Helvetica, sans-serif;
 }
 

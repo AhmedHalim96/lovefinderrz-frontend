@@ -32,7 +32,7 @@ class Register extends Component {
 	render() {
 		let { error, errorMessage } = this.state;
 		return (
-			<div className="login">
+			<div className="register">
 				<div className="card">
 					<div className="card__header">
 						<Logo />
