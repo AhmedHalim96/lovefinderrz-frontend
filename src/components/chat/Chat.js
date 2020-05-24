@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import RecentChat from "./RecentChat";
+import SidebarChat from "./SidebarChat";
 import avatar from "../../assets/avatar.jpg";
 
 class Chat extends Component {
@@ -13,6 +13,18 @@ class Chat extends Component {
 	};
 	render() {
 		let { name, avatar, message, date } = this.state.recentChat;
+		let chats = [];
+		for (let i = 0; i < 20; i++) {
+			chats.push(
+				<SidebarChat
+					name={name}
+					date={date}
+					avatar={avatar}
+					message={message}
+					selected={i === 0}
+				/>
+			);
+		}
 		return (
 			<div className="chat">
 				<div className="chat__sidebar">
@@ -22,98 +34,7 @@ class Chat extends Component {
 						</span>
 						<input type="text" placeholder="Search" className="chat__search" />
 					</div>
-					<div className="chat__recentchats u-scroller">
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-						<RecentChat
-							name={name}
-							date={date}
-							avatar={avatar}
-							message={message}
-						/>
-					</div>
+					<div className="chat__recentchats u-scroller">{chats}</div>
 				</div>
 				<div className="chat__main">
 					<div className="chat__title"></div>

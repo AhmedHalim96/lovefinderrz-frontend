@@ -1,15 +1,19 @@
-$bg-color: #282c34;
-$color-white: #ffffff;
 $accent-color: #61dafb;
-$color-black: #000;
+$bg-color: #282c34;
 $link-color: darken($accent-color, 20);
-$color-danger: red;
-$color-grey-light: #bdbdbd;
-$color-grey-dark: #424242;
-$color-blue-light: #0277bd;
 $sidebar-color: lighten(
 	$color: $bg-color,
 	$amount: 5,
 );
+
+$color-white: #ffffff;
+$color-black: #000;
+$color-danger: red;
+$color-grey-light: #bdbdbd;
+$color-grey-dark: #424242;
+$color-blue-light-1: #0277bd;
+$color-blue-light-2: #81d4fa;
+$color-blue-light-3: #82b1ff;
+$color-indigo-1: #283593;
 
 $default-font-size: 1.6rem;

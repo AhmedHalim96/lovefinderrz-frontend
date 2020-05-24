@@ -47,7 +47,7 @@
 		}
 	}
 
-	&__recentchat {
+	&__sidebarchat {
 		@include flex-center;
 		justify-content: space-evenly;
 		padding: 1rem 0.5rem;
@@ -61,6 +61,12 @@
 			background-color: lighten($color: $bg-color, $amount: 8);
 			cursor: pointer;
 		}
+		&-selected {
+			background-color: rgba($color-blue-light-2, 0.2);
+			&:hover {
+				background-color: rgba($color-blue-light-2, 0.2);
+			}
+		}
 
 		&_avatar {
 			width: 6rem;
@@ -69,7 +75,7 @@
 		}
 
 		&_info {
-			width: 100%;
+			width: 80%;
 			margin-left: 1rem;
 			display: flex;
 			align-items: stretch;
@@ -93,7 +99,7 @@
 
 		&_message {
 			font-size: 1.2rem;
-			color: $color-blue-light;
+			color: $color-blue-light-3;
 		}
 	}
 
