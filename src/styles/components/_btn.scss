@@ -1,7 +1,7 @@
 .btn {
 	&,
 	&:visited {
-		color: white;
+		color: $color-white;
 		display: inline-block;
 		text-decoration: none;
 		font-size: $default-font-size;
@@ -21,10 +21,36 @@
 		outline: none;
 		box-shadow: 0 0.5rem 1rem rgba($color-white, 0.1);
 	}
+	&::-moz-focus-inner {
+		border: none;
+	}
 
 	&:hover {
 		background-color: darken($color: $accent-color, $amount: 30);
 		color: $color-white;
 		box-shadow: 0 1rem 2rem rgba($color-black, 0.15);
+	}
+
+	&-outline {
+		&,
+		&:visited {
+			padding: 0rem;
+			font-weight: lighter;
+			margin: 0rem;
+			background-color: transparent;
+		}
+
+		&:active,
+		&:focus {
+			outline: none;
+			border: none;
+			box-shadow: none;
+		}
+
+		&:hover {
+			background-color: transparent;
+			color: darken($color: $color-white, $amount: 20);
+			box-shadow: none;
+		}
 	}
 }

@@ -17,10 +17,7 @@
 @mixin center-box {
 	width: 100vw;
 	height: 100vh;
-	display: flex;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
+	@include flex-center();
 }
 
 @mixin center-page {
@@ -32,6 +29,12 @@
 	@include respond(tall-screens) {
 		@include center-box();
 	}
+}
+
+@mixin flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 // Media Query Manager
