@@ -30,3 +30,16 @@
 .u-mt-xl {
 	margin-top: 10rem !important;
 }
+
+.u-move-out-left {
+	animation: moveOutLeft 0.5s forwards;
+}
+.u-move-out-right {
+	animation: moveOutRight 0.75s forwards;
+}
+.u-move-in-right {
+	animation: moveInRight 0.5s forwards;
+}
+.u-move-in-left {
+	animation: moveInLeft 0.75s forwards;
+}

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Logo from "../layout/Logo";
 
 class Register extends Component {
 	state = {
 		error: false,
 		errorMessage: "",
+		animation: "u-move-in-right",
 	};
 
 	// Refs
@@ -13,6 +14,17 @@ class Register extends Component {
 	_name;
 	_password;
 	_confirmPassword;
+
+	animatedRedirect = e => {
+		e.preventDefault();
+		this.setState({
+			animation: "u-move-out-right",
+		});
+
+		setTimeout(() => {
+			this.props.history.push("/");
+		}, 750);
+	};
 
 	registerUser = e => {
 		e.preventDefault();
@@ -29,10 +41,11 @@ class Register extends Component {
 			this.setState({ error: true, errorMessage: "Passwords Don't match" });
 		}
 	};
+
 	render() {
-		let { error, errorMessage } = this.state;
+		let { error, errorMessage, animation } = this.state;
 		return (
-			<div className="register">
+			<div className={`register ${animation}`}>
 				<div className="card">
 					<div className="card__header">
 						<Logo />
@@ -96,8 +109,8 @@ class Register extends Component {
 					</form>
 					<p className="paragraph">
 						Already a user?{" "}
-						<Link to="/" className="link">
-							Login!{" "}
+						<Link to="/" className="link" onClick={this.animatedRedirect}>
+							LOGIN!{" "}
 						</Link>
 					</p>
 				</div>
@@ -106,4 +119,4 @@ class Register extends Component {
 	}
 }
 
-export default Register;
+export default withRouter(Register);

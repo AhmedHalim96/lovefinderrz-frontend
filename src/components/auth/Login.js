@@ -1,11 +1,23 @@
 import React, { Component } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Logo from "../layout/Logo";
-export default class Login extends Component {
+class Login extends Component {
 	state = {
 		error: false,
 		errorMessage: "",
+		animation: "u-move-in-left",
+	};
+
+	animatedRedirect = e => {
+		e.preventDefault();
+		this.setState({
+			animation: "u-move-out-left",
+		});
+
+		setTimeout(() => {
+			this.props.history.push("/register");
+		}, 750);
 	};
 
 	// Refs
@@ -13,11 +25,11 @@ export default class Login extends Component {
 	_password;
 
 	render() {
-		let { error, errorMessage } = this.state;
+		let { error, errorMessage, animation } = this.state;
 
 		return (
-			<div className="login">
-				<div className="card">
+			<div className="login ">
+				<div className={`card ${animation}`}>
 					<div className="card__header">
 						<Logo />
 					</div>
@@ -57,7 +69,11 @@ export default class Login extends Component {
 
 					<p className="paragraph">
 						Not a user?{" "}
-						<Link to="/register" className="link">
+						<Link
+							to="/register"
+							className="link"
+							onClick={this.animatedRedirect}
+						>
 							JOIN US!{" "}
 						</Link>
 					</p>
@@ -66,3 +82,5 @@ export default class Login extends Component {
 		);
 	}
 }
+
+export default withRouter(Login);
