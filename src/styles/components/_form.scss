@@ -23,6 +23,10 @@
 		&-danger {
 			border-color: $color-danger;
 		}
+
+		&::placeholder {
+			color: $color-grey-light;
+		}
 	}
 
 	&__error {

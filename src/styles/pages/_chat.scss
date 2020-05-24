@@ -4,13 +4,14 @@
 	display: flex;
 	&__sidebar {
 		flex: 1;
-		height: 100vh;
+		min-height: 100vh;
 		background-color: lighten($color: $bg-color, $amount: 5);
 
 		&_top {
-			height: 8rem;
 			@include flex-center;
-			justify-content: space-around;
+			justify-content: space-evenly;
+			margin-top: 1rem;
+			margin-bottom: 1rem;
 		}
 
 		&_toggler {
@@ -19,15 +20,70 @@
 	}
 
 	&__search {
-		height: 3rem;
 		background-color: lighten($color: $bg-color, $amount: 10);
 		padding: 0.5rem;
-		margin-right: 0.5rem;
-		margin-left: 0.5rem;
 		border: none;
 		border-radius: 0.6rem;
 		color: $color-white;
 		font-size: 2rem;
+		&::placeholder {
+			color: $color-grey-light;
+		}
+	}
+
+	&__recentchats {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__recentchat {
+		@include flex-center;
+		justify-content: space-evenly;
+		padding: 1rem 0;
+		margin-bottom: 1rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		&:hover {
+			background-color: lighten($color: $bg-color, $amount: 8);
+			cursor: pointer;
+		}
+
+		&_avatar {
+			width: 6rem;
+			height: auto;
+			border-radius: 50%;
+		}
+
+		&_info {
+			width: 28rem;
+			align-self: stretch;
+			display: flex;
+			align-items: stretch;
+			justify-content: space-around;
+			flex-direction: column;
+		}
+
+		&_title {
+			@include flex-center;
+			justify-content: space-between;
+
+			&_username {
+				font-size: $default-font-size;
+				font-weight: bold;
+				color: darken($color: $color-white, $amount: 5);
+			}
+			&_date {
+				color: $color-grey-light;
+			}
+		}
+
+		&_message {
+			font-size: 1.2rem;
+			color: $color-blue-light;
+		}
 	}
 
 	&__main {
