@@ -7,5 +7,9 @@ $color-danger: red;
 $color-grey-light: #bdbdbd;
 $color-grey-dark: #424242;
 $color-blue-light: #0277bd;
+$sidebar-color: lighten(
+	$color: $bg-color,
+	$amount: 5,
+);
 
 $default-font-size: 1.6rem;

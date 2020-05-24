@@ -22,7 +22,7 @@ class Chat extends Component {
 						</span>
 						<input type="text" placeholder="Search" className="chat__search" />
 					</div>
-					<div className="chat__recentchats">
+					<div className="chat__recentchats u-scroller">
 						<RecentChat
 							name={name}
 							date={date}

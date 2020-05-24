@@ -31,6 +31,8 @@
 	margin-top: 10rem !important;
 }
 
+// Animations
+
 .u-move-out-left {
 	animation: moveOutLeft 0.5s forwards;
 }
@@ -42,4 +44,14 @@
 }
 .u-move-in-left {
 	animation: moveInLeft 0.75s forwards;
+}
+
+//misc
+
+.u-scroller {
+	width: 300px;
+	height: 100px;
+	overflow-y: scroll;
+	scrollbar-color: $sidebar-color $sidebar-color;
+	scrollbar-width: thin;
 }
