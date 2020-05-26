@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SidebarChat from "./SidebarChat";
 import avatar from "../../assets/avatar.jpg";
+import Message from "./Message";
 
 class Chat extends Component {
 	state = {
@@ -15,11 +16,15 @@ class Chat extends Component {
 			subTitle: "Yesterday",
 			messages: [
 				{
+					SentTime: "04:15pm",
+					avatar: avatar,
 					sentby: "Ahmed Halim",
 					text:
-						"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?",
+						"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?",
 				},
 				{
+					SentTime: "04:15pm",
+					avatar: avatar,
 					sentby: "me",
 					text:
 						"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?",
@@ -31,7 +36,7 @@ class Chat extends Component {
 		let { name, avatar, message, date } = this.state.recentChat;
 		let { username, subTitle, messages } = this.state.selectedChat;
 		let chats = [];
-		let chatMessages = [];
+		let messagesd = [];
 
 		for (let i = 0; i < 20; i++) {
 			chats.push(
@@ -42,6 +47,17 @@ class Chat extends Component {
 					message={message}
 					selected={i === 0}
 				/>
+			);
+
+			messages.forEach(message =>
+				messagesd.push(
+					<Message
+						senderAvatar={message.avatar}
+						senderName={message.sentby}
+						messageText={message.text}
+						sentTime={message.SentTime}
+					/>
+				)
 			);
 		}
 		return (
@@ -67,9 +83,7 @@ class Chat extends Component {
 							</span>
 						</div>
 					</div>
-					<div className="chat__messages">
-						{/* @TODO:create message component */}
-					</div>
+					<div className="chat__messages u-scroller">{messagesd}</div>
 					<div className="chat__bar">
 						<span className="btn btn-outline chat__bar_attachment">
 							<i className="fa fa-paperclip"></i>

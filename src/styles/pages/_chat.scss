@@ -153,6 +153,76 @@
 	&__messages {
 		flex: 15;
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		margin-bottom: 1rem;
+	}
+
+	&__message {
+		display: flex;
+		margin: 1rem 2rem;
+
+		&_avatar {
+			width: 5rem;
+			height: 5rem;
+			border-radius: 50%;
+		}
+
+		&_body {
+			position: relative;
+			padding: 2rem;
+			max-width: 33.33%;
+			border-radius: 0.2rem;
+			background-color: lighten($bg-color, 10);
+			&-left {
+				&:after {
+					content: "";
+					position: absolute;
+					left: 0;
+					top: 60%;
+					width: 0;
+					height: 0;
+					border: 17px solid transparent;
+					border-right-color: lighten($bg-color, 10);
+					border-left: 0;
+					border-bottom: 0;
+					margin-top: -8.5px;
+					margin-left: -17px;
+				}
+			}
+
+			&-right {
+				background: $color-blue-light-1;
+				&:after {
+					content: "";
+					position: absolute;
+					right: 0;
+					top: 60%;
+					width: 0;
+					height: 0;
+					border: 17px solid transparent;
+					border-left-color: $color-blue-light-1;
+					border-right: 0;
+					border-bottom: 0;
+					margin-top: -8.5px;
+					margin-right: -17px;
+				}
+			}
+		}
+
+		&_time {
+			position: absolute;
+			bottom: 1%;
+			left: 99%;
+			transform: translateX(-99%) translateY(-1%);
+			color: $color-grey-light;
+			align-self: flex-end;
+		}
+
+		&-right {
+			justify-content: end;
+		}
 	}
 
 	&__bar {
