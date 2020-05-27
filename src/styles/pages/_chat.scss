@@ -3,9 +3,7 @@
 	height: 100vh;
 	display: flex;
 	&__sidebar {
-		min-width: 20%;
-		flex-basis: 20%;
-		flex-shrink: 0;
+		min-width: 38.4rem;
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
@@ -17,7 +15,7 @@
 			width: 100%;
 			@include flex-center;
 			justify-content: space-evenly;
-			padding: 1rem 0.5rem;
+			padding: 1rem 0rem;
 		}
 
 		&_toggler {
@@ -45,9 +43,10 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		@include scroller($sidebar-color);
 
 		&:hover {
-			scrollbar-color: lighten($sidebar-color, 20) lighten($sidebar-color, 5);
+			@include scroller-hovered($sidebar-color);
 		}
 	}
 
@@ -112,11 +111,11 @@
 		height: 100vh;
 		display: flex;
 		flex-direction: column;
-		align-items: start;
-		justify-content: start;
+		align-items: flex-start;
+		justify-content: flex-start;
 	}
 
-	&__title {
+	&__topbar {
 		flex-shrink: 0;
 		flex: 1;
 		width: 100%;
@@ -125,16 +124,16 @@
 		justify-content: space-between;
 		padding: 0 2rem;
 		box-sizing: border-box;
-		background-color: $sidebar-color;
+		background-color: darken($color: $sidebar-color, $amount: 2);
 
 		&_left {
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start;
-			justify-content: cente;
+			justify-content: center;
 		}
 
-		&_main {
+		&_title {
 			font-size: 1.4rem;
 			font-weight: 400;
 		}
@@ -157,12 +156,19 @@
 		flex-direction: column;
 		justify-content: flex-start;
 		margin-bottom: 1rem;
+		@include scroller($bg-color);
+
+		&:hover {
+			@include scroller-hovered($bg-color);
+		}
 	}
 
 	&__message {
 		display: flex;
 		margin: 1rem 2rem;
-
+		&:first-child {
+			margin-top: auto !important;
+		}
 		&_avatar {
 			width: 5rem;
 			height: 5rem;
@@ -170,17 +176,18 @@
 		}
 
 		&_body {
+			min-width: 4rem;
 			position: relative;
 			padding: 2rem;
 			max-width: 33.33%;
-			border-radius: 0.2rem;
+			border-radius: 0.4rem;
 			background-color: lighten($bg-color, 10);
 			&-left {
 				&:after {
 					content: "";
 					position: absolute;
 					left: 0;
-					top: 60%;
+					top: 70%;
 					width: 0;
 					height: 0;
 					border: 17px solid transparent;
@@ -198,7 +205,7 @@
 					content: "";
 					position: absolute;
 					right: 0;
-					top: 60%;
+					top: 70%;
 					width: 0;
 					height: 0;
 					border: 17px solid transparent;
@@ -221,11 +228,11 @@
 		}
 
 		&-right {
-			justify-content: end;
+			justify-content: flex-end;
 		}
 	}
 
-	&__bar {
+	&__typingbar {
 		flex: 1;
 		flex-shrink: 0;
 		width: 100%;
@@ -236,12 +243,21 @@
 		// flex-basis: 1 14 1;
 
 		&_attachment,
+		&_submit,
 		&_emoji {
+			align-self: flex-end;
 			flex-shrink: 0;
 			flex: 1;
 			font-size: 2.5rem;
 			color: $color-grey-dark;
 			min-width: 4.825rem;
+			margin-bottom: 0.7rem;
+		}
+
+		&_form {
+			flex: 30;
+			display: flex;
+			align-self: center;
 		}
 
 		&_input {
@@ -249,8 +265,23 @@
 			background-color: $sidebar-color;
 			border: none;
 			box-sizing: border-box;
-			padding: 0 1rem;
 			color: white;
+			resize: none;
+			outline: none;
+			padding: 2rem 0;
+			word-wrap: break-word;
+			align-self: center;
+			max-height: 20rem;
+			font-size: $default-font-size;
+			-ms-overflow-style: none;
+			&::-webkit-scrollbar {
+				display: none;
+			}
+			@include scroller($sidebar-color);
+		}
+
+		&_submit {
+			margin-bottom: 1.1rem;
 		}
 	}
 }

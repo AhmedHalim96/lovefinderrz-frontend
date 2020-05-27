@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import SidebarChat from "./SidebarChat";
+import Sidebar from "./Sidebar";
 import avatar from "../../assets/avatar.jpg";
-import Message from "./Message";
+import TextareaAutosize from "react-textarea-autosize";
+import MessagesArea from "./MessagesArea";
+import ChatTopBar from "./ChatTopBar";
 
 class Chat extends Component {
 	state = {
+		typedmessage: "",
 		recentChat: {
 			avatar: avatar,
 			name: "Ahmed Halim",
@@ -32,68 +35,66 @@ class Chat extends Component {
 			],
 		},
 	};
+
+	sendMessage = async e => {
+		e.preventDefault();
+		const { typedmessage } = this.state;
+		if ((e.keyCode === 13) & (typedmessage.trim() !== "")) {
+			await this.setState(prevState => ({
+				selectedChat: {
+					...prevState.selectedChat,
+					messages: [
+						...prevState.selectedChat.messages,
+						{
+							SentTime: "04:15pm",
+							avatar: avatar,
+							sentby: "me",
+							text: this.state.typedmessage,
+						},
+					],
+				},
+			}));
+			this.setState({ typedmessage: "" });
+		}
+	};
+
 	render() {
 		let { name, avatar, message, date } = this.state.recentChat;
 		let { username, subTitle, messages } = this.state.selectedChat;
-		let chats = [];
-		let messagesd = [];
 
-		for (let i = 0; i < 20; i++) {
-			chats.push(
-				<SidebarChat
-					name={name}
-					date={date}
-					avatar={avatar}
-					message={message}
-					selected={i === 0}
-				/>
-			);
-
-			messages.forEach(message =>
-				messagesd.push(
-					<Message
-						senderAvatar={message.avatar}
-						senderName={message.sentby}
-						messageText={message.text}
-						sentTime={message.SentTime}
-					/>
-				)
-			);
-		}
 		return (
 			<div className="chat">
-				<div className="chat__sidebar">
-					<div className="chat__sidebar_top">
-						<span className="btn btn-outline chat__sidebar_toggler">
-							&#9776;
-						</span>
-						<input type="text" placeholder="Search" className="chat__search" />
-					</div>
-					<div className="chat__recentchats u-scroller">{chats}</div>
-				</div>
+				<Sidebar name={name} avatar={avatar} message={message} date={date} />
+
 				<div className="chat__main">
-					<div className="chat__title">
-						<div className="chat__title_left">
-							<h2 className="chat__title_main">{username}</h2>
-							<span className="chat__title_subtitle">{subTitle}</span>
-						</div>
-						<div className="chat__title_right">
-							<span className="btn btn-outline">
-								<i className="fa fa-search"></i>
-							</span>
-						</div>
-					</div>
-					<div className="chat__messages u-scroller">{messagesd}</div>
-					<div className="chat__bar">
-						<span className="btn btn-outline chat__bar_attachment">
+					<ChatTopBar username={username} subTitle={subTitle} />
+					<MessagesArea messages={messages} />
+
+					<div className="chat__typingbar">
+						<span className="btn btn-outline chat__typingbar_attachment">
 							<i className="fa fa-paperclip"></i>
 						</span>
-						<input
-							type="text"
-							className="chat__bar_input"
-							placeholder="write a message......"
-						/>
-						<span className=" btn btn-outline chat__bar_emoji">
+						<form className="chat__typingbar_form">
+							<TextareaAutosize
+								className="chat__typingbar_input"
+								placeholder="Write a message......"
+								// ref={input => (this._typedmessage = input)}
+								onKeyUp={this.sendMessage}
+								value={this.state.typedmessage}
+								onChange={e =>
+									this.setState({ typedmessage: e.currentTarget.value })
+								}
+							/>
+							<button
+								type="submit"
+								className="chat__typingbar_submit btn btn-outline"
+								onClick={this.sendMessage}
+							>
+								<i className="fa fa-send"></i>
+							</button>
+						</form>
+
+						<span className=" btn btn-outline chat__typingbar_emoji">
 							<i className="fa fa-reddit-alien"></i>
 						</span>
 					</div>

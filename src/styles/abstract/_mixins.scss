@@ -37,6 +37,16 @@
 	justify-content: center;
 }
 
+@mixin scroller($color) {
+	overflow-y: scroll;
+	scrollbar-color: $color $color;
+	scrollbar-width: thin;
+}
+
+@mixin scroller-hovered($color) {
+	scrollbar-color: lighten($color, 20) lighten($color, 5);
+}
+
 // Media Query Manager
 
 @mixin respond($breakpoint) {

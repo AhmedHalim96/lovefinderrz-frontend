@@ -99,3 +99,12 @@
 		transform: translateY(0);
 	}
 }
+
+@keyframes slideUp {
+	0% {
+		transform: translateY(40rem);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
