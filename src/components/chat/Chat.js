@@ -7,7 +7,11 @@ import ChatTopBar from "./ChatTopBar";
 
 class Chat extends Component {
 	state = {
-		typedmessage: "",
+		phoneLayoutStatus: {
+			sidebar: true,
+			chatArea: false,
+		},
+		typedMessage: "",
 		recentChat: {
 			avatar: avatar,
 			name: "Ahmed Halim",
@@ -36,10 +40,32 @@ class Chat extends Component {
 		},
 	};
 
+	backToSideBar = e => {
+		this.setState({
+			phoneLayoutStatus: {
+				sidebar: true,
+				chatArea: false,
+			},
+		});
+	};
+
+	selectChat = e => {
+		//TODO: look
+
+		this.setState({
+			phoneLayoutStatus: {
+				sidebar: false,
+				chatArea: true,
+			},
+		});
+	};
 	sendMessage = async e => {
 		e.preventDefault();
-		const { typedmessage } = this.state;
-		if ((e.keyCode === 13) & (typedmessage.trim() !== "")) {
+		const { typedMessage } = this.state;
+		if (
+			((e.keyCode === 13 && !e.shiftKey) | (e.type === "click")) &
+			(typedMessage.trim() !== "")
+		) {
 			await this.setState(prevState => ({
 				selectedChat: {
 					...prevState.selectedChat,
@@ -49,25 +75,41 @@ class Chat extends Component {
 							SentTime: "04:15pm",
 							avatar: avatar,
 							sentby: "me",
-							text: this.state.typedmessage,
+							text: this.state.typedMessage.trim(),
 						},
 					],
 				},
 			}));
-			this.setState({ typedmessage: "" });
+			this.setState({ typedMessage: "" });
 		}
 	};
 
 	render() {
 		let { name, avatar, message, date } = this.state.recentChat;
 		let { username, subTitle, messages } = this.state.selectedChat;
+		let { typedMessage, phoneLayoutStatus } = this.state;
 
 		return (
 			<div className="chat">
-				<Sidebar name={name} avatar={avatar} message={message} date={date} />
+				<Sidebar
+					name={name}
+					avatar={avatar}
+					message={message}
+					date={date}
+					phoneLayoutStatus={phoneLayoutStatus.sidebar}
+					selectChat={this.selectChat}
+				/>
 
-				<div className="chat__main">
-					<ChatTopBar username={username} subTitle={subTitle} />
+				<div
+					className={`chat__main chat__main_phone-port-${
+						phoneLayoutStatus.chatArea ? "show" : "hide"
+					}`}
+				>
+					<ChatTopBar
+						username={username}
+						subTitle={subTitle}
+						backToSideBar={this.backToSideBar}
+					/>
 					<MessagesArea messages={messages} />
 
 					<div className="chat__typingbar">
@@ -78,11 +120,10 @@ class Chat extends Component {
 							<TextareaAutosize
 								className="chat__typingbar_input"
 								placeholder="Write a message......"
-								// ref={input => (this._typedmessage = input)}
-								onKeyUp={this.sendMessage}
-								value={this.state.typedmessage}
+								onKeyUpCapture={this.sendMessage}
+								value={typedMessage}
 								onChange={e =>
-									this.setState({ typedmessage: e.currentTarget.value })
+									this.setState({ typedMessage: e.currentTarget.value })
 								}
 							/>
 							<button

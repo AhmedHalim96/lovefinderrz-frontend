@@ -2,13 +2,36 @@
 	width: 100vw;
 	height: 100vh;
 	display: flex;
+
 	&__sidebar {
-		min-width: 38.4rem;
+		flex-basis: 20%;
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
 		background-color: $sidebar-color;
 		border-right: 0.1rem solid lighten($color-black, 10);
+
+		@include respond(wide-desktop) {
+			flex-basis: 25%;
+		}
+		@include respond(tab-land) {
+			flex-basis: 30%;
+		}
+		@include respond(tab-port) {
+			flex-basis: 35%;
+		}
+
+		&_phone-port-show {
+			@include respond(phone-port) {
+				display: flex;
+				flex-basis: 100%;
+			}
+		}
+		&_phone-port-hide {
+			@include respond(phone-port) {
+				display: none;
+			}
+		}
 
 		&_top {
 			background-color: darken($color: $sidebar-color, $amount: 2);
@@ -50,7 +73,7 @@
 		}
 	}
 
-	&__sidebarchat {
+	&__sidebarItem {
 		@include flex-center;
 		justify-content: space-evenly;
 		padding: 1rem 0.5rem;
@@ -66,8 +89,8 @@
 		}
 		&-selected {
 			background-color: rgba($color-blue-light-2, 0.2);
-			&:hover {
-				background-color: rgba($color-blue-light-2, 0.2);
+			@include respond(phone-port) {
+				background-color: $sidebar-color;
 			}
 		}
 
@@ -102,6 +125,9 @@
 
 		&_message {
 			font-size: 1.2rem;
+			@include respond(tab-port) {
+				font-size: 1.6rem;
+			}
 			color: $color-blue-light-3;
 		}
 	}
@@ -112,34 +138,66 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-		justify-content: flex-start;
+		justify-content: space-between;
+		&_phone-port-show {
+			@include respond(phone-port) {
+				display: flex;
+				flex-basis: 100%;
+			}
+		}
+		&_phone-port-hide {
+			@include respond(phone-port) {
+				display: none;
+			}
+		}
 	}
 
 	&__topbar {
-		flex-shrink: 0;
-		flex: 1;
+		flex-basis: 6.25%;
+		max-height: 7rem;
+		@include respond(phone-port) {
+			flex-basis: 8.25%;
+		}
 		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 2rem;
-		box-sizing: border-box;
 		background-color: darken($color: $sidebar-color, $amount: 2);
 
 		&_left {
 			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			justify-content: center;
+
+			justify-content: space-between;
+		}
+
+		&_back {
+			padding: 1rem;
+			font-size: 2.5rem;
+			display: none;
+			@include respond(phone-port) {
+				display: inline-block;
+			}
 		}
 
 		&_title {
-			font-size: 1.4rem;
-			font-weight: 400;
-		}
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+			&-main {
+				font-size: 1.4rem;
 
-		&_subtitle {
-			color: $color-grey-light;
+				@include respond(tab-port) {
+					font-size: 1.6rem;
+				}
+				font-weight: 400;
+			}
+			&-sub {
+				&_subtitle {
+					color: $color-grey-light;
+				}
+			}
 		}
 
 		&_right {
@@ -150,12 +208,16 @@
 	}
 
 	&__messages {
-		flex: 15;
+		flex-basis: 87.5%;
+		@include respond(tab-port) {
+			flex-basis: 90%;
+		}
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		margin-bottom: 1rem;
+		overflow-x: hidden;
 		@include scroller($bg-color);
 
 		&:hover {
@@ -176,18 +238,23 @@
 		}
 
 		&_body {
+			display: flex;
+			flex-direction: column;
 			min-width: 4rem;
 			position: relative;
-			padding: 2rem;
-			max-width: 33.33%;
+			padding: 1rem 1rem 0.4rem;
+			max-width: 45%;
 			border-radius: 0.4rem;
+			text-align: center;
+			word-break: break-all;
+			white-space: pre-wrap;
 			background-color: lighten($bg-color, 10);
 			&-left {
 				&:after {
 					content: "";
 					position: absolute;
 					left: 0;
-					top: 70%;
+					top: 60%;
 					width: 0;
 					height: 0;
 					border: 17px solid transparent;
@@ -205,7 +272,7 @@
 					content: "";
 					position: absolute;
 					right: 0;
-					top: 70%;
+					top: 60%;
 					width: 0;
 					height: 0;
 					border: 17px solid transparent;
@@ -219,10 +286,6 @@
 		}
 
 		&_time {
-			position: absolute;
-			bottom: 1%;
-			left: 99%;
-			transform: translateX(-99%) translateY(-1%);
 			color: $color-grey-light;
 			align-self: flex-end;
 		}
@@ -233,20 +296,17 @@
 	}
 
 	&__typingbar {
-		flex: 1;
-		flex-shrink: 0;
+		flex-basis: 6.25%;
+		align-self: flex-end;
 		width: 100%;
 		background-color: $sidebar-color;
-		box-sizing: border-box;
 		@include flex-center;
-
-		// flex-basis: 1 14 1;
 
 		&_attachment,
 		&_submit,
 		&_emoji {
 			align-self: flex-end;
-			flex-shrink: 0;
+
 			flex: 1;
 			font-size: 2.5rem;
 			color: $color-grey-dark;
@@ -264,7 +324,7 @@
 			flex: 30;
 			background-color: $sidebar-color;
 			border: none;
-			box-sizing: border-box;
+
 			color: white;
 			resize: none;
 			outline: none;
