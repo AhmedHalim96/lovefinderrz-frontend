@@ -34,4 +34,34 @@
 		animation-duration: 0.5s;
 		animation-fill-mode: forwards;
 	}
+
+	&__file {
+		width: 0.1px;
+		height: 0.1px;
+		opacity: 0;
+		overflow: hidden;
+		position: absolute;
+		z-index: -1;
+
+		& + label {
+			align-self: center;
+			background: $color-grey-light;
+			word-spacing: -0.2em;
+			margin-top: 1rem;
+			width: 12rem;
+			height: 12rem;
+			border: 0.1rem solid $accent-color;
+			border-radius: 50%;
+			text-align: center;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+
+			span {
+				color: $color-white;
+				font-weight: bold;
+			}
+		}
+	}
 }

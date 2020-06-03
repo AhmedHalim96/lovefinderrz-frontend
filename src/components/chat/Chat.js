@@ -50,7 +50,7 @@ class Chat extends Component {
 	};
 
 	selectChat = e => {
-		//TODO: look
+		//TODO: Change selected chat
 
 		this.setState({
 			phoneLayoutStatus: {
