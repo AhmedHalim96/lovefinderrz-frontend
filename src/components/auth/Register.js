@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import Logo from "../layout/Logo";
-import axios from "axios";
 
-// TODO: Turn into a functional component with useState
+import { connect } from "react-redux";
+import { registerUser } from "../../store/auth";
 class Register extends Component {
 	state = {
 		error: false,
@@ -21,7 +21,7 @@ class Register extends Component {
 	_password;
 	_confirmPassword;
 
-	registerUser = e => {
+	_registerUser = e => {
 		e.preventDefault();
 
 		if (this._password.value === this._confirmPassword.value) {
@@ -31,16 +31,15 @@ class Register extends Component {
 					errorMessage: "",
 				});
 			}
-			const formData = new FormData();
-			formData.append("name", this._name.value);
-			formData.append("email", this._email.value);
-			formData.append("password", this._password.value);
-			formData.append("avatar", this.state.avatar);
 
-			axios
-				.post("http://lovefinderrz.test/api/v1/user/register", formData)
-				.then(res => {
-					console.log("DEBUG:", res.data);
+			this.props
+				.registerUser(
+					this._name.value,
+					this._email.value,
+					this._password.value,
+					this.state.avatar
+				)
+				.then(() => {
 					this.setState({
 						redirect: true,
 					});
@@ -121,11 +120,7 @@ class Register extends Component {
 						<Logo />
 					</div>
 					<h2 className="card__title"> Register</h2>
-					<form
-						onSubmit={this.registerUser}
-						className="form"
-						encType="multipart/form-data"
-					>
+					<form className="form" encType="multipart/form-data">
 						<div className="form__group">
 							<input
 								name="avatar"
@@ -204,7 +199,19 @@ class Register extends Component {
 						) : (
 							<p className="u-mb-md-1"></p>
 						)}
-						<button className="btn form__submit" type="submit">
+						<button
+							className="btn form__submit"
+							type="submit"
+							onClick={e => {
+								e.preventDefault();
+								this.props.registerUser(
+									this._name.value,
+									this._email.value,
+									this._password.value,
+									this.state.avatar
+								);
+							}}
+						>
 							Register
 						</button>
 					</form>
@@ -220,4 +227,4 @@ class Register extends Component {
 	}
 }
 
-export default withRouter(Register);
+export default connect(null, { registerUser })(withRouter(Register));

@@ -1,25 +1,16 @@
 import React, { Component } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Chat from "./components/chat/Chat";
+import { connect } from "react-redux";
 
 class App extends Component {
-	state = {
-		authenticated: false,
-		user: null,
-		token: null,
+	componentDidMount = () => {
+		console.log(this.props);
 	};
-
-	changeAuthenticationStatus = () => {
-		this.setState(prevState => ({
-			authenticated: !prevState.authenticated,
-		}));
-	};
-
 	render() {
-		const authenticated = this.state.authenticated;
+		const authenticated = this.props.authenticated;
 		return (
 			<Switch>
 				{/*UnAuthenticated Routes*/}
@@ -29,15 +20,9 @@ class App extends Component {
 					</Route>
 				)}
 				{authenticated ? null : (
-					<Route
-						path="/login"
-						render={props => (
-							<Login
-								{...props}
-								changeAuthenticationStatus={this.changeAuthenticationStatus}
-							/>
-						)}
-					/>
+					<Route path="/login">
+						<Login />
+					</Route>
 				)}
 				{authenticated ? null : (
 					<Route path="/">
@@ -52,9 +37,7 @@ class App extends Component {
 				{/*Authenticated Routes*/}
 				{authenticated ? (
 					<Route path="/chat">
-						<Chat
-							changeAuthenticationStatus={this.changeAuthenticationStatus}
-						/>
+						<Chat />
 					</Route>
 				) : null}
 				{authenticated ? (
@@ -66,4 +49,9 @@ class App extends Component {
 		);
 	}
 }
-export default App;
+
+const mapStateToProps = state => ({
+	authenticated: state.auth.authenticated,
+});
+
+export default connect(mapStateToProps, null)(App);

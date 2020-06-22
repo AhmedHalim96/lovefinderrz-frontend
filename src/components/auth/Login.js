@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-
 import { Link, withRouter } from "react-router-dom";
 import Logo from "../layout/Logo";
-import axios from "axios";
+import { connect } from "react-redux";
+import { loginInUser } from "../../store/auth";
 
 class Login extends Component {
 	state = {
@@ -26,26 +26,6 @@ class Login extends Component {
 			return null;
 		}
 	}
-
-	loginUser = e => {
-		e.preventDefault();
-		const { email, password } = this.state;
-		const formData = new FormData();
-		formData.append("email", email);
-		formData.append("password", password);
-		axios
-			.post("http://lovefinderrz.test/api/v1/user/login", formData)
-			.then(res => {
-				console.log(res.data);
-				this.animatedRedirect("");
-			})
-			.catch(error => {
-				this.setState({
-					error: true,
-					errorMessage: error.response.data.message,
-				});
-			});
-	};
 
 	// Layout Methods
 
@@ -105,7 +85,10 @@ class Login extends Component {
 						<button
 							className="btn form__submit"
 							type="submit"
-							onClick={this.loginUser}
+							onClick={e => {
+								e.preventDefault();
+								this.props.loginInUser(email, password);
+							}}
 						>
 							Login
 						</button>
@@ -129,5 +112,6 @@ class Login extends Component {
 		);
 	}
 }
+const mapStateToProps = state => ({});
 
-export default withRouter(Login);
+export default connect(null, { loginInUser })(withRouter(Login));

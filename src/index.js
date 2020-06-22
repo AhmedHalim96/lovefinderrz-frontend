@@ -3,12 +3,17 @@ import ReactDOM from "react-dom";
 import "./styles/App.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter, withRouter } from "react-router-dom";
+import store from "./store/configureStore";
 
+const AppWithRoute = withRouter(App);
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<App />
+			<Provider store={store}>
+				<AppWithRoute />
+			</Provider>
 		</BrowserRouter>
 	</React.StrictMode>,
 	document.getElementById("root")
