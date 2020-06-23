@@ -3,22 +3,20 @@ import { Link, withRouter } from "react-router-dom";
 import Logo from "../layout/Logo";
 import { connect } from "react-redux";
 import { loginInUser } from "../../store/auth";
+import { startAnimatedRedirection } from "../../store/layout";
 
 class Login extends Component {
 	state = {
-		error: false,
-		errorMessage: "",
-		animation: "u-move-in-left",
-		email: "",
+		email: null,
 		password: "",
 	};
 
 	static getDerivedStateFromProps(props, state) {
-		// TODO: Improve this!
 		try {
-			if (props.location.state.email && state.email === "") {
+			const email = new URLSearchParams(props.location.search).get("email");
+			if (email && state.email === null) {
 				return {
-					email: props.location.state.email,
+					email: email,
 				};
 			}
 			return null;
@@ -27,40 +25,36 @@ class Login extends Component {
 		}
 	}
 
-	// Layout Methods
-
-	animatedRedirect = (path = "") => {
-		this.setState({
-			animation: "u-move-out-left",
-		});
-		setTimeout(() => {
-			if (path) {
-				this.props.history.push(path);
-			} else {
-				this.props.changeAuthenticationStatus();
-			}
-		}, 750);
-	};
-
 	render() {
-		const { email, password, error, errorMessage, animation } = this.state;
+		const { email, password } = this.state;
+		const { error, startAnimatedRedirection, history } = this.props;
+		const { exiting, initialAnimation, exitAnimation } = this.props.layout;
 
 		return (
-			<div className="login ">
-				<div className={`card ${animation}`}>
+			<div className="login">
+				<div className={`card ${exiting ? exitAnimation : initialAnimation}`}>
 					<div className="card__header">
 						<Logo />
 					</div>
 					<h2 className="card__title"> Login</h2>
-					<form className="form">
+					<form
+						className="form"
+						onSubmit={e => {
+							e.preventDefault();
+							this.props.loginInUser(email, password);
+						}}
+					>
 						<div className="form__group">
 							<label htmlFor="email">Email:</label>
 							<input
 								name="email"
 								type="email"
 								required
-								className="form__input"
-								value={email}
+								className={`form__input ${
+									error.errorOccurred ? "form__input-danger" : ""
+								}`}
+								value={email ? email : ""}
+								placeholder="Your Email"
 								onChange={e => this.setState({ email: e.target.value })}
 							/>
 						</div>
@@ -70,26 +64,22 @@ class Login extends Component {
 								name="password"
 								type="password"
 								required
-								className="form__input"
+								className={`form__input ${
+									error.errorOccurred ? "form__input-danger" : ""
+								}`}
 								value={password}
+								placeholder="Your Super Secret Password"
 								onChange={e => this.setState({ password: e.target.value })}
 							/>
 						</div>
-						{error ? (
+						{error.errorOccurred ? (
 							<p className="paragraph paragraph-danger form__error">
-								{errorMessage}
+								{error.errorMessage}
 							</p>
 						) : (
 							<p className="u-mb-md-1"></p>
 						)}
-						<button
-							className="btn form__submit"
-							type="submit"
-							onClick={e => {
-								e.preventDefault();
-								this.props.loginInUser(email, password);
-							}}
-						>
+						<button className="btn form__submit" type="submit">
 							Login
 						</button>
 					</form>
@@ -101,7 +91,11 @@ class Login extends Component {
 							className="link"
 							onClick={e => {
 								e.preventDefault();
-								this.animatedRedirect("/register");
+								startAnimatedRedirection(
+									"login",
+									`/register${email ? `?email=${email}` : ""}`,
+									history
+								);
 							}}
 						>
 							JOIN US!{" "}
@@ -112,6 +106,12 @@ class Login extends Component {
 		);
 	}
 }
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+	error: state.auth.errors.login,
+	layout: state.layout.login,
+});
 
-export default connect(null, { loginInUser })(withRouter(Login));
+export default connect(mapStateToProps, {
+	loginInUser,
+	startAnimatedRedirection,
+})(withRouter(Login));

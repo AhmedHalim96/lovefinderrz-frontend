@@ -1,126 +1,115 @@
 import React, { Component } from "react";
-import { Link, withRouter, Redirect } from "react-router-dom";
-import Logo from "../layout/Logo";
-
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { produce } from "immer";
 import { registerUser } from "../../store/auth";
+import Logo from "../layout/Logo";
+import { startAnimatedRedirection } from "../../store/layout";
+
 class Register extends Component {
 	state = {
-		error: false,
-		errorTarget: "",
-		errorMessage: "",
-		redirect: false,
-		animation: "u-move-in-right",
-		avatar: null,
-		avatarbg: "",
+		formError: {},
+		name: "",
+		email: null,
+		password: "",
+		confirmPassword: "",
+		avatar: "",
+		avatarPreview: "",
 	};
 
-	// Input Refs
-	_email;
-	_name;
-	_password;
-	_confirmPassword;
-
-	_registerUser = e => {
-		e.preventDefault();
-
-		if (this._password.value === this._confirmPassword.value) {
-			if (this.state.error) {
-				this.setState({
-					error: false,
-					errorMessage: "",
-				});
+	static getDerivedStateFromProps(props, state) {
+		try {
+			const email = new URLSearchParams(props.location.search).get("email");
+			if (email && state.email === null) {
+				return {
+					email: email,
+				};
 			}
-
-			this.props
-				.registerUser(
-					this._name.value,
-					this._email.value,
-					this._password.value,
-					this.state.avatar
-				)
-				.then(() => {
-					this.setState({
-						redirect: true,
-					});
-				})
-				.catch(error => {
-					console.log("DEBUG:", error.response.data);
-					if (error.response.data.email) {
-						this.setState({
-							error: true,
-							errorTarget: error.response.data.email ? "email" : "",
-							errorMessage: error.response.data.email[0],
-						});
-					} else if (error.response.data.message) {
-						this.setState({
-							error: true,
-							errorMessage: error.response.data.message,
-						});
-					}
-				});
-		} else {
-			this.setState({
-				error: true,
-				errorTarget: "password",
-				errorMessage: "Passwords Don't match",
-			});
+			return null;
+		} catch (error) {
+			return null;
 		}
-	};
+	}
 
-	// Layout methods
-	animatedRedirect = e => {
-		e.preventDefault();
-		this.setState({
-			animation: "u-move-out-right",
-		});
+	confirmPasswordCheck = () => {
+		const { password, confirmPassword } = this.state;
+		const confirmPasswordError = !(password === confirmPassword);
 
-		setTimeout(() => {
-			this.setState({ redirect: true });
-		}, 750);
+		this.setState(
+			produce(draftState => {
+				draftState.formError.status = confirmPasswordError;
+				draftState.formError.target = confirmPasswordError ? "password" : "";
+				draftState.formError.message = confirmPasswordError
+					? "Passwords don't match!"
+					: "";
+			})
+		);
 	};
 
 	onChangeAvatar = e => {
-		const fileSize = e.target.files[0].size;
+		const targetFile = e.target.files[0];
+		const fileSize = targetFile.size;
 		if (fileSize > 2086666) {
-			this.setState({
-				error: true,
-				errorMessage: "image is too large",
-			});
+			this.setState(
+				produce(state => {
+					state.formError.status = true;
+					state.formError.target = "avatar";
+					state.formError.message = "Image size is too big!";
+				})
+			);
 			return;
 		}
-		this.setState({
-			avatarbg: URL.createObjectURL(e.target.files[0]),
-			avatar: e.target.files[0],
-			error: false,
-		});
+
+		this.setState(
+			produce(state => {
+				state.avatarPreview = URL.createObjectURL(targetFile);
+				state.avatar = targetFile;
+				state.formError = {};
+			})
+		);
 	};
 
 	render() {
-		let {
-			error,
-			errorTarget,
-			errorMessage,
-			animation,
-			redirect,
-			avatarbg,
+		const {
+			name,
+			email,
+			password,
+			confirmPassword,
+			avatar,
+			avatarPreview,
+			formError,
 		} = this.state;
+		const { exiting, initialAnimation, exitAnimation } = this.props.layout;
+		const {
+			error,
+			history,
+			startAnimatedRedirection,
+			registerUser,
+		} = this.props;
+
 		return (
-			<div className={`register ${animation}`}>
-				{redirect ? (
-					<Redirect
-						to={{
-							pathname: "/login",
-							state: { email: this._email.value },
-						}}
-					/>
-				) : null}
+			<div className={`register ${exiting ? exitAnimation : initialAnimation}`}>
 				<div className="card">
 					<div className="card__header">
 						<Logo />
 					</div>
 					<h2 className="card__title"> Register</h2>
-					<form className="form" encType="multipart/form-data">
+					<form
+						className="form"
+						encType="multipart/form-data"
+						onSubmit={async e => {
+							e.preventDefault();
+							if (password === confirmPassword) {
+								await registerUser(name, email, password, avatar);
+								if (!error.errorOccurred)
+									startAnimatedRedirection(
+										"register",
+										`/login${email ? `?email=${email}` : ""}`,
+										history
+									);
+							}
+						}}
+					>
 						<div className="form__group">
 							<input
 								name="avatar"
@@ -133,11 +122,11 @@ class Register extends Component {
 							<label
 								htmlFor="avatar"
 								style={{
-									backgroundImage: `url(${avatarbg})`,
+									backgroundImage: `url(${avatarPreview})`,
 									backgroundSize: "cover",
 								}}
 							>
-								<span>{avatarbg === "" ? "your photo" : ""}</span>
+								<span>{avatarPreview === "" ? "your photo" : ""}</span>
 							</label>
 						</div>
 
@@ -148,7 +137,9 @@ class Register extends Component {
 								type="text"
 								required
 								className="form__input"
-								ref={input => (this._name = input)}
+								value={name}
+								placeholder="Your Name"
+								onChange={e => this.setState({ name: e.target.value })}
 							/>
 						</div>
 						<div className="form__group">
@@ -158,9 +149,13 @@ class Register extends Component {
 								type="email"
 								required
 								className={`form__input ${
-									error & (errorTarget === "email") ? "form__input-danger" : ""
+									error.errorOccurred & (error.errorTarget === "email")
+										? "form__input-danger"
+										: ""
 								}`}
-								ref={input => (this._email = input)}
+								value={email ? email : ""}
+								placeholder="Your Email"
+								onChange={e => this.setState({ email: e.target.value })}
 							/>
 						</div>
 						<div className="form__group">
@@ -170,11 +165,16 @@ class Register extends Component {
 								type="password"
 								required
 								className={`form__input ${
-									error & (errorTarget === "password")
+									formError.status && formError.target === "password"
 										? " form__input-danger"
 										: ""
 								}`}
-								ref={input => (this._password = input)}
+								value={password}
+								placeholder="Secret Password"
+								onChange={async e => {
+									await this.setState({ password: e.target.value });
+									this.confirmPasswordCheck();
+								}}
 							/>
 						</div>
 						<div className="form__group">
@@ -184,41 +184,49 @@ class Register extends Component {
 								type="password"
 								required
 								className={`form__input ${
-									error & (errorTarget === "password")
+									formError.status && formError.target === "password"
 										? " form__input-danger"
 										: ""
 								}`}
-								ref={input => (this._confirmPassword = input)}
+								value={confirmPassword}
+								placeholder="Secret Password"
+								onChange={async e => {
+									await this.setState({ confirmPassword: e.target.value });
+									this.confirmPasswordCheck();
+								}}
 							/>{" "}
 						</div>
 
 						{error ? (
 							<p className="paragraph paragraph-danger form__error">
-								{errorMessage}
+								{error.errorOccurred
+									? error.errorMessage
+									: formError.status
+									? formError.message
+									: ""}
 							</p>
 						) : (
 							<p className="u-mb-md-1"></p>
 						)}
-						<button
-							className="btn form__submit"
-							type="submit"
-							onClick={e => {
-								e.preventDefault();
-								this.props.registerUser(
-									this._name.value,
-									this._email.value,
-									this._password.value,
-									this.state.avatar
-								);
-							}}
-						>
+						<button className="btn form__submit" type="submit">
 							Register
 						</button>
 					</form>
 					<p className="paragraph">
 						Already a user?{" "}
-						<Link to="/" className="link" onClick={this.animatedRedirect}>
-							LOGIN!{" "}
+						<Link
+							to="/"
+							className="link"
+							onClick={e => {
+								e.preventDefault();
+								startAnimatedRedirection(
+									"register",
+									`/login${email ? `?email=${email}` : ""}`,
+									history
+								);
+							}}
+						>
+							LOGIN!
 						</Link>
 					</p>
 				</div>
@@ -227,4 +235,12 @@ class Register extends Component {
 	}
 }
 
-export default connect(null, { registerUser })(withRouter(Register));
+const mapStateToProps = state => ({
+	error: state.auth.errors.register,
+	layout: state.layout.register,
+});
+
+export default connect(mapStateToProps, {
+	registerUser,
+	startAnimatedRedirection,
+})(withRouter(Register));

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiRequestStarted, apiRequestSuccess, apiRequestFailed } from "../api";
-import { baseURL } from "../apiConfig";
+import { baseURL, headers } from "../apiConfig";
 
 const api = ({ dispatch, getState }) => next => action => {
 	if (action.type !== apiRequestStarted.type) return next(action);
@@ -16,6 +16,7 @@ const api = ({ dispatch, getState }) => next => action => {
 			url,
 			method,
 			data,
+			headers,
 		})
 		.then(res => {
 			dispatch(apiRequestSuccess(res.data));
@@ -23,7 +24,7 @@ const api = ({ dispatch, getState }) => next => action => {
 		})
 		.catch(err => {
 			dispatch(apiRequestFailed(err.message));
-			if (onError) dispatch({ type: onError, payload: err.message });
+			if (onError) dispatch({ type: onError, payload: err.response.data });
 		});
 };
 
