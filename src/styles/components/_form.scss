@@ -1,6 +1,8 @@
 .form {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	justify-content: stretch;
 	padding: 1rem;
 	&__group {
 		display: flex;
@@ -8,18 +10,18 @@
 		margin-bottom: 1rem;
 
 		label {
-			font-size: 1.4rem;
+			font-size: 1.6rem;
 			text-transform: capitalize;
 			color: $accent-color;
 		}
 	}
 	&__input {
-		padding: 0.5rem;
+		padding: 1rem;
 		border: 0.1rem solid $accent-color;
 		border-radius: 0.6rem;
 		background-color: $bg-color;
 		color: $color-white;
-		font-size: 2rem;
+		font-size: 1.6rem;
 		&-danger {
 			border-color: $color-danger;
 		}

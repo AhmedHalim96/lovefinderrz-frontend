@@ -4,6 +4,7 @@ import Logo from "../layout/Logo";
 import { connect } from "react-redux";
 import { loginInUser } from "../../store/auth";
 import { startAnimatedRedirection } from "../../store/layout";
+import Spinner from "../layout/Spinner";
 
 class Login extends Component {
 	state = {
@@ -27,11 +28,12 @@ class Login extends Component {
 
 	render() {
 		const { email, password } = this.state;
-		const { error, startAnimatedRedirection, history } = this.props;
+		const { error, startAnimatedRedirection, history, loading } = this.props;
 		const { exiting, initialAnimation, exitAnimation } = this.props.layout;
 
 		return (
 			<div className="login">
+				{loading ? <Spinner /> : null}
 				<div className={`card ${exiting ? exitAnimation : initialAnimation}`}>
 					<div className="card__header">
 						<Logo />
@@ -109,6 +111,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
 	error: state.auth.errors.login,
 	layout: state.layout.login,
+	loading: state.auth.loading,
 });
 
 export default connect(mapStateToProps, {

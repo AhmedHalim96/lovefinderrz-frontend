@@ -5,6 +5,7 @@ import { produce } from "immer";
 import { registerUser } from "../../store/auth";
 import Logo from "../layout/Logo";
 import { startAnimatedRedirection } from "../../store/layout";
+import Spinner from "../layout/Spinner";
 
 class Register extends Component {
 	state = {
@@ -85,10 +86,12 @@ class Register extends Component {
 			history,
 			startAnimatedRedirection,
 			registerUser,
+			loading,
 		} = this.props;
 
 		return (
 			<div className={`register ${exiting ? exitAnimation : initialAnimation}`}>
+				{loading ? <Spinner /> : null}
 				<div className="card">
 					<div className="card__header">
 						<Logo />
@@ -238,6 +241,7 @@ class Register extends Component {
 const mapStateToProps = state => ({
 	error: state.auth.errors.register,
 	layout: state.layout.register,
+	loading: state.auth.loading,
 });
 
 export default connect(mapStateToProps, {
