@@ -9,6 +9,13 @@
 		flex-direction: column;
 		margin-bottom: 1rem;
 
+		&-checkbox {
+			margin-top: 1rem;
+			flex-direction: row;
+			align-items: center;
+			margin-bottom: 0;
+		}
+
 		label {
 			font-size: 1.6rem;
 			text-transform: capitalize;
@@ -30,7 +37,32 @@
 			color: $color-grey-light;
 		}
 	}
+	&__checkbox {
+		display: none;
+		& + label {
+			background-color: $color-white;
+			display: flex;
+			width: 2.5rem;
+			height: 2.5rem;
+			border-radius: 0.5rem;
+			border: 0.1rem $accent-color solid;
+			justify-content: center;
+			align-items: center;
+			font-size: 2.5rem;
+			cursor: pointer;
+			&:hover {
+				background-color: darken($color: $color-white, $amount: 10%);
+			}
+			.fa {
+				color: darken($color: $accent-color, $amount: 30%);
+			}
 
+			+ p {
+				font-size: 2rem;
+				margin-left: 1rem;
+			}
+		}
+	}
 	&__error {
 		animation-name: moveInBottom;
 		animation-duration: 0.5s;

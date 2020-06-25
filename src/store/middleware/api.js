@@ -2,7 +2,7 @@ import axios from "axios";
 import { apiRequestStarted, apiRequestSuccess, apiRequestFailed } from "../api";
 import { baseURL, headers } from "../apiConfig";
 
-const api = ({ dispatch, getState }) => next => action => {
+const api = ({ dispatch, getState }) => next => async action => {
 	if (action.type !== apiRequestStarted.type) return next(action);
 
 	const { url, method, data, onStart, onSuccess, onError } = action.payload;
@@ -10,7 +10,7 @@ const api = ({ dispatch, getState }) => next => action => {
 	if (onStart) dispatch({ type: onStart });
 	next(action);
 
-	axios
+	await axios
 		.request({
 			baseURL,
 			url,

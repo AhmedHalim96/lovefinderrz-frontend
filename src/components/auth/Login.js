@@ -10,6 +10,7 @@ class Login extends Component {
 	state = {
 		email: null,
 		password: "",
+		rememberMe: true,
 	};
 
 	static getDerivedStateFromProps(props, state) {
@@ -27,7 +28,7 @@ class Login extends Component {
 	}
 
 	render() {
-		const { email, password } = this.state;
+		const { email, password, rememberMe } = this.state;
 		const { error, startAnimatedRedirection, history, loading } = this.props;
 		const { exiting, initialAnimation, exitAnimation } = this.props.layout;
 
@@ -43,7 +44,7 @@ class Login extends Component {
 						className="form"
 						onSubmit={e => {
 							e.preventDefault();
-							this.props.loginInUser(email, password);
+							this.props.loginInUser(email, password, rememberMe);
 						}}
 					>
 						<div className="form__group">
@@ -73,6 +74,22 @@ class Login extends Component {
 								placeholder="Your Super Secret Password"
 								onChange={e => this.setState({ password: e.target.value })}
 							/>
+							<div className="form__group form__group-checkbox">
+								<input
+									type="checkbox"
+									name="remember-me"
+									className="form__checkbox"
+									// value={rememberMe}
+									// onChange={}
+								/>
+								<label
+									htmlFor="remember-me"
+									onClick={e => this.setState({ rememberMe: !rememberMe })}
+								>
+									{rememberMe ? <i className="fa fa-check"></i> : ""}
+								</label>
+								<p>Remember Me</p>
+							</div>
 						</div>
 						{error.errorOccurred ? (
 							<p className="paragraph paragraph-danger form__error">

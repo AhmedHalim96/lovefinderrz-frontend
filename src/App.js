@@ -4,13 +4,17 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Chat from "./components/chat/Chat";
 import { connect } from "react-redux";
+import { fetchUserFromLocal } from "./store/auth";
+import Spinner from "./components/layout/Spinner";
 
 class App extends Component {
-	componentDidMount = () => {
-		console.log(this.props);
-	};
+	componentDidMount() {
+		this.props.fetchUserFromLocal();
+	}
+
 	render() {
-		const authenticated = this.props.authenticated;
+		const { authenticated, loading } = this.props;
+		if (loading) return <Spinner />;
 		return (
 			<Switch>
 				{/*UnAuthenticated Routes*/}
@@ -52,6 +56,7 @@ class App extends Component {
 
 const mapStateToProps = state => ({
 	authenticated: state.auth.authenticated,
+	loading: state.auth.loading,
 });
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, { fetchUserFromLocal })(App);

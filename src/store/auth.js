@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAction } from "@reduxjs/toolkit";
 import { apiRequestStarted } from "./api";
 import { loginConfig, registerConfig } from "./apiConfig";
 
@@ -17,6 +17,19 @@ const authSlice = createSlice({
 		},
 	},
 	reducers: {
+		fetchingStoredUser: (state, action) => {
+			state.loading = true;
+		},
+		fetchingStoredUserSuccess: (state, action) => {
+			const { user, token } = action.payload;
+			state.user = user;
+			state.token = token;
+			state.authenticated = true;
+			state.loading = false;
+		},
+		fetchingStoredUserFailed: (state, action) => {
+			state.loading = false;
+		},
 		userLogInRequested: (state, action) => {
 			state.loading = true;
 			state.errors.login = {};
@@ -64,7 +77,6 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-// Action Creators
 const {
 	userLogInRequested,
 	userRegistered,
@@ -72,10 +84,36 @@ const {
 	userLoggedIn,
 	userLogInFailed,
 	userRegisterRequested,
+	fetchingStoredUser,
+	fetchingStoredUserSuccess,
+	fetchingStoredUserFailed,
 } = authSlice.actions;
 
-export const loginInUser = (email, password) => (dispatch, getState) => {
-	dispatch(
+// Action Creators
+
+const storingUserInlocalStorage = createAction(
+	"auth/storingUserInlocalStorage"
+);
+
+export const fetchUserFromLocal = () => (dispatch, getState) => {
+	dispatch({ type: fetchingStoredUser.type });
+	const token = localStorage.getItem("token");
+	const user = JSON.parse(localStorage.getItem("user"));
+	if (user && token) {
+		dispatch({
+			type: fetchingStoredUserSuccess.type,
+			payload: { user, token },
+		});
+	} else {
+		dispatch({ type: fetchingStoredUserFailed.type });
+	}
+};
+
+export const loginInUser = (email, password, remeberMe) => async (
+	dispatch,
+	getState
+) => {
+	await dispatch(
 		apiRequestStarted({
 			url: loginConfig.url,
 			method: loginConfig.method,
@@ -85,15 +123,21 @@ export const loginInUser = (email, password) => (dispatch, getState) => {
 			onError: userLogInFailed.type,
 		})
 	);
+
+	if (remeberMe) {
+		const { user, token } = getState().auth;
+		if (user && token) {
+			dispatch({ type: storingUserInlocalStorage.type });
+			localStorage.setItem("user", JSON.stringify(user));
+			localStorage.setItem("token", token);
+		}
+	}
 };
 
-export const registerUser = (
-	name,
-	email,
-	password,
-	confirmPassword,
-	avatar
-) => (dispatch, getState) => {
+export const registerUser = (name, email, password, avatar) => (
+	dispatch,
+	getState
+) => {
 	const formData = new FormData();
 	formData.append("name", name);
 	formData.append("email", email);
