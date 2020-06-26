@@ -4,61 +4,19 @@ import avatar from "../../assets/avatar.jpg";
 import TextareaAutosize from "react-textarea-autosize";
 import MessagesArea from "./MessagesArea";
 import ChatTopBar from "./ChatTopBar";
+import { connect } from "react-redux";
+import { getChats } from "../../store/chat";
+import Spinner from "../layout/Spinner";
 
 class Chat extends Component {
+	componentDidMount = () => {
+		this.props.getChats();
+	};
+
 	state = {
-		phoneLayoutStatus: {
-			sidebar: true,
-			chatArea: false,
-		},
 		typedMessage: "",
-		recentChat: {
-			avatar: avatar,
-			name: "Ahmed Halim",
-			message: "Hello, From The other side!",
-			date: "11.04.3",
-		},
-		selectedChat: {
-			username: "Ahmed Halim",
-			subTitle: "Yesterday",
-			messages: [
-				{
-					SentTime: "04:15pm",
-					avatar: avatar,
-					sentby: "Ahmed Halim",
-					text:
-						"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?",
-				},
-				{
-					SentTime: "04:15pm",
-					avatar: avatar,
-					sentby: "me",
-					text:
-						"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quibusdam sint saepe quae quo?",
-				},
-			],
-		},
 	};
 
-	backToSideBar = e => {
-		this.setState({
-			phoneLayoutStatus: {
-				sidebar: true,
-				chatArea: false,
-			},
-		});
-	};
-
-	selectChat = e => {
-		//TODO: Change selected chat
-
-		this.setState({
-			phoneLayoutStatus: {
-				sidebar: false,
-				chatArea: true,
-			},
-		});
-	};
 	sendMessage = async e => {
 		e.preventDefault();
 		const { typedMessage } = this.state;
@@ -85,63 +43,68 @@ class Chat extends Component {
 	};
 
 	render() {
-		let { name, avatar, message, date } = this.state.recentChat;
-		let { username, subTitle, messages } = this.state.selectedChat;
-		let { typedMessage, phoneLayoutStatus } = this.state;
+		const { typedMessage } = this.state;
+		const { loading, chats, selectedChat, showChatArea } = this.props;
+
+		if (loading) return <Spinner />;
 
 		return (
 			<div className="chat">
-				<Sidebar
-					name={name}
-					avatar={avatar}
-					message={message}
-					date={date}
-					phoneLayoutStatus={phoneLayoutStatus.sidebar}
-					selectChat={this.selectChat}
-				/>
+				<Sidebar chats={chats} />
 
 				<div
 					className={`chat__main chat__main_phone-port-${
-						phoneLayoutStatus.chatArea ? "show" : "hide"
+						showChatArea ? "show" : "hide"
 					}`}
 				>
-					<ChatTopBar
-						username={username}
-						subTitle={subTitle}
-						backToSideBar={this.backToSideBar}
-					/>
-					<MessagesArea messages={messages} />
-
-					<div className="chat__typingbar">
-						<span className="btn btn-outline chat__typingbar_attachment">
-							<i className="fa fa-paperclip"></i>
-						</span>
-						<form className="chat__typingbar_form">
-							<TextareaAutosize
-								className="chat__typingbar_input"
-								placeholder="Write a message......"
-								onKeyUpCapture={this.sendMessage}
-								value={typedMessage}
-								onChange={e =>
-									this.setState({ typedMessage: e.currentTarget.value })
-								}
+					{selectedChat.id ? (
+						<React.Fragment>
+							<ChatTopBar
+								chatTitle={selectedChat.users[0].name}
+								subTitle={"subTitle"}
 							/>
-							<button
-								type="submit"
-								className="chat__typingbar_submit btn btn-outline"
-								onClick={this.sendMessage}
-							>
-								<i className="fa fa-send"></i>
-							</button>
-						</form>
+							<MessagesArea messages={selectedChat.messages} />
 
-						<span className=" btn btn-outline chat__typingbar_emoji">
-							<i className="fa fa-reddit-alien"></i>
-						</span>
-					</div>
+							<div className="chat__typingbar">
+								<span className="btn btn-outline chat__typingbar_attachment">
+									<i className="fa fa-paperclip"></i>
+								</span>
+								<form className="chat__typingbar_form">
+									<TextareaAutosize
+										className="chat__typingbar_input"
+										placeholder="Write a message......"
+										onKeyUpCapture={this.sendMessage}
+										value={typedMessage}
+										onChange={e =>
+											this.setState({ typedMessage: e.currentTarget.value })
+										}
+									/>
+									<button
+										type="submit"
+										className="chat__typingbar_submit btn btn-outline"
+										onClick={this.sendMessage}
+									>
+										<i className="fa fa-send"></i>
+									</button>
+								</form>
+
+								<span className=" btn btn-outline chat__typingbar_emoji">
+									<i className="fa fa-reddit-alien"></i>
+								</span>
+							</div>
+						</React.Fragment>
+					) : null}
 				</div>
 			</div>
 		);
 	}
 }
-export default Chat;
+
+const mapStateToProps = state => ({
+	loading: state.chat.loading,
+	chats: state.chat.chats,
+	selectedChat: state.chat.selectedChat,
+	showChatArea: state.layout.chat.smallScreensLayout.showChatArea,
+});
+
+export default connect(mapStateToProps, { getChats })(Chat);

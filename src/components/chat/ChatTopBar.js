@@ -1,17 +1,28 @@
 import React from "react";
+import { changeSmallScreenLayout } from "../../store/layout";
+import { unSelectChat } from "../../store/chat";
+import { connect } from "react-redux";
 
-export default function ChatTopBar({ username, subTitle, backToSideBar }) {
+function ChatTopBar({
+	chatTitle,
+	subTitle,
+	changeSmallScreenLayout,
+	unSelectChat,
+}) {
 	return (
 		<div className="chat__topbar">
 			<div className="chat__topbar_left">
 				<button
 					className="btn btn-outline chat__topbar_back"
-					onClick={backToSideBar}
+					onClick={e => {
+						changeSmallScreenLayout({ showChatArea: false, showSidebar: true });
+						unSelectChat();
+					}}
 				>
 					<i className="fa fa-arrow-left"></i>
 				</button>
 				<div className="chat__topbar_title">
-					<h2 className="chat__topbar_title-main">{username}</h2>
+					<h2 className="chat__topbar_title-main">{chatTitle}</h2>
 					<span className="chat__topbar_title-sub">{subTitle}</span>
 				</div>
 			</div>
@@ -23,3 +34,7 @@ export default function ChatTopBar({ username, subTitle, backToSideBar }) {
 		</div>
 	);
 }
+
+export default connect(null, { changeSmallScreenLayout, unSelectChat })(
+	ChatTopBar
+);

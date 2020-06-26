@@ -5,12 +5,11 @@ export default function Message({
 	senderName,
 	messageText,
 	sentTime,
+	byCurrentUser,
 }) {
 	return (
 		<div
-			className={`chat__message ${
-				senderName === "me" ? "chat__message-right" : ""
-			}`}
+			className={`chat__message ${byCurrentUser ? "chat__message-right" : ""}`}
 		>
 			{/* <img
 				src={senderAvatar}
@@ -19,9 +18,7 @@ export default function Message({
 			/> */}
 			<div
 				className={`chat__message_body ${
-					senderName === "me"
-						? "chat__message_body-right"
-						: "chat__message_body-left"
+					byCurrentUser ? "chat__message_body-right" : "chat__message_body-left"
 				}`}
 			>
 				{/* <h2 className="chat__message_sender">{senderName}</h2> */}

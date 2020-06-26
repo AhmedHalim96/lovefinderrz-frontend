@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import Message from "./Message";
+import { connect } from "react-redux";
 
-export default function MessagesArea({ messages }) {
-	// for (let i = 0; i < 10; i++) {
-	// 	messages = [...messages, messages[0], messages[1]];
-	// }
+function MessagesArea({ messages, currentUserId }) {
 	const messagesEndRef = useRef(null);
 
 	const scrollToBottom = () => {
@@ -16,16 +14,26 @@ export default function MessagesArea({ messages }) {
 	useEffect(scrollToBottom, [messages]);
 	return (
 		<div className="chat__messages">
-			{messages.map((message, id) => (
-				<Message
-					key={id}
-					senderAvatar={message.avatar}
-					senderName={message.sentby}
-					messageText={message.text}
-					sentTime={message.SentTime}
-				/>
-			))}
+			{messages.map((message, index) => {
+				const { id, avatar, name } = message.user;
+				return (
+					<Message
+						key={message.id}
+						senderAvatar={avatar}
+						senderName={name}
+						messageText={message.body}
+						sentTime={message.created_at}
+						byCurrentUser={currentUserId === id}
+					/>
+				);
+			})}
 			<div ref={messagesEndRef} />
 		</div>
 	);
 }
+
+const mapStateToProps = state => ({
+	currentUserId: state.auth.user.id,
+});
+
+export default connect(mapStateToProps, {})(MessagesArea);

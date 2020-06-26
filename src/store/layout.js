@@ -17,6 +17,12 @@ const layoutSlice = createSlice({
 			exitAnimation: "u-move-out-right",
 			redirectWithEmailAddress: false,
 		},
+		chat: {
+			smallScreensLayout: {
+				showSidebar: true,
+				showChatArea: false,
+			},
+		},
 	},
 	reducers: {
 		animatedRedirectionStarted: (layout, action) => {
@@ -28,6 +34,12 @@ const layoutSlice = createSlice({
 			const target = action.payload.currentPage;
 			layout[target].exiting = false;
 		},
+
+		smallScreensLayoutChanged: (layout, action) => {
+			const { showSidebar, showChatArea } = action.payload;
+			layout.chat.smallScreensLayout.showChatArea = showChatArea;
+			layout.chat.smallScreensLayout.showSidebar = showSidebar;
+		},
 	},
 });
 
@@ -37,6 +49,7 @@ export default layoutSlice.reducer;
 const {
 	animatedRedirectionStarted,
 	animatedRedirectionDone,
+	smallScreensLayoutChanged,
 } = layoutSlice.actions;
 
 export const startAnimatedRedirection = (
@@ -56,4 +69,14 @@ export const startAnimatedRedirection = (
 			payload: { currentPage },
 		});
 	}, 750);
+};
+
+export const changeSmallScreenLayout = ({ showChatArea, showSidebar }) => (
+	dispatch,
+	getState
+) => {
+	dispatch({
+		type: smallScreensLayoutChanged.type,
+		payload: { showChatArea, showSidebar },
+	});
 };
