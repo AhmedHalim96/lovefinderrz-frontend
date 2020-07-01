@@ -1,22 +1,35 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectChat } from "../../store/chat";
+import moment from "moment";
 import { changeSmallScreenLayout } from "../../store/layout";
 
-function SidebarItem({
-	chat,
-	currentUserId,
-	selectChat,
-	selectedChatId,
-	changeSmallScreenLayout,
-}) {
+function SidebarItem({ chat }) {
+	const dispatch = useDispatch();
+	const currentUserId = useSelector(state => state.auth.user.id);
+	const selectedChatId = useSelector(state => state.chat.selectedChat.id);
+
 	let { id, messages } = chat;
-	let lastMessage = messages[0]; //TODO: Change this
-	let sender = lastMessage.user;
+	let lastMessage = messages[0];
+	let lastMessageTime;
+	if (lastMessage.id) {
+		const lastMessageMoment = moment(lastMessage.created_at);
+		if (moment().day() !== lastMessageMoment.day()) {
+			lastMessageTime = `${
+				lastMessageMoment.month() + 1
+			}.${lastMessageMoment.date()}`;
+		} else {
+			lastMessageTime = `${
+				lastMessageMoment.hour() > 12
+					? lastMessageMoment.hour() - 12
+					: lastMessageMoment.hour()
+			}:${lastMessageMoment.minutes()}${
+				lastMessageMoment.hour() >= 12 ? "pm" : "am"
+			}`;
+		}
+	}
 	let name = chat.users[0].name;
-	let date = lastMessage.created_at;
-	let avatar = sender.avatar;
-	let message = lastMessage.body;
+	let avatar = chat.users[0].avatar;
 	let selected = selectedChatId === id;
 
 	return (
@@ -25,9 +38,12 @@ function SidebarItem({
 				selected ? "chat__sidebarItem-selected" : ""
 			}`}
 			onClick={async e => {
-				console.log(chat);
-				await selectChat(chat);
-				changeSmallScreenLayout({ showChatArea: true, showSidebar: false });
+				if (selectedChatId !== chat.id) {
+					await dispatch(selectChat(chat));
+					dispatch(
+						changeSmallScreenLayout({ showChatArea: true, showSidebar: false })
+					);
+				}
 			}}
 		>
 			<img
@@ -38,22 +54,22 @@ function SidebarItem({
 			<div className="chat__sidebarItem_info">
 				<div className="chat__sidebarItem_title">
 					<h2 className="chat__sidebarItem_title_username">{name}</h2>
-					<p className="chat__sidebarItem_title_date">{date}</p>
+					<p className="chat__sidebarItem_title_date">
+						{messages.length ? lastMessageTime : ""}
+					</p>
 				</div>
-				<p className="chat__sidebarItem_message">{`${
-					currentUserId === sender.id ? "You: " : ""
-				} ${message.substr(0, 20)} ${message.length > 20 ? "..." : ""}`}</p>
+				<p className="chat__sidebarItem_message">
+					{messages.length
+						? `${
+								currentUserId === lastMessage.user.id ? "You: " : ""
+						  } ${lastMessage.body.substr(0, 20)} ${
+								lastMessage.body.length > 20 ? "..." : ""
+						  }`
+						: "No Messages"}
+				</p>
 			</div>
 		</div>
 	);
 }
 
-const mapStateToProps = state => ({
-	currentUserId: state.auth.user.id,
-	selectedChatId: state.chat.selectedChat.id,
-});
-
-export default connect(mapStateToProps, {
-	selectChat,
-	changeSmallScreenLayout,
-})(SidebarItem);
+export default SidebarItem;

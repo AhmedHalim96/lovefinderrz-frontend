@@ -1,20 +1,24 @@
 import React, { useEffect, useRef } from "react";
 import Message from "./Message";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-function MessagesArea({ messages, currentUserId }) {
+function MessagesArea() {
+	const currentUserId = useSelector(state => state.auth.user.id);
+	const messages = useSelector(state => state.chat.selectedChat.messages);
+
 	const messagesEndRef = useRef(null);
-
 	const scrollToBottom = () => {
 		messagesEndRef.current.scrollIntoView({
 			behavior: "auto",
 		});
 	};
 
+	let messagesReversed = [...messages].reverse();
+
 	useEffect(scrollToBottom, [messages]);
 	return (
 		<div className="chat__messages">
-			{messages.map((message, index) => {
+			{messagesReversed.map((message, index) => {
 				const { id, avatar, name } = message.user;
 				return (
 					<Message
@@ -32,8 +36,4 @@ function MessagesArea({ messages, currentUserId }) {
 	);
 }
 
-const mapStateToProps = state => ({
-	currentUserId: state.auth.user.id,
-});
-
-export default connect(mapStateToProps, {})(MessagesArea);
+export default MessagesArea;

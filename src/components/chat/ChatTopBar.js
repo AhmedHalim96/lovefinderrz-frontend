@@ -1,22 +1,25 @@
 import React from "react";
 import { changeSmallScreenLayout } from "../../store/layout";
 import { unSelectChat } from "../../store/chat";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-function ChatTopBar({
-	chatTitle,
-	subTitle,
-	changeSmallScreenLayout,
-	unSelectChat,
-}) {
+function ChatTopBar({ subTitle }) {
+	const dispatch = useDispatch();
+	const chatTitle = useSelector(state => state.chat.selectedChat.users[0].name);
+
 	return (
 		<div className="chat__topbar">
 			<div className="chat__topbar_left">
 				<button
 					className="btn btn-outline chat__topbar_back"
 					onClick={e => {
-						changeSmallScreenLayout({ showChatArea: false, showSidebar: true });
-						unSelectChat();
+						dispatch(
+							changeSmallScreenLayout({
+								showChatArea: false,
+								showSidebar: true,
+							})
+						);
+						dispatch(unSelectChat());
 					}}
 				>
 					<i className="fa fa-arrow-left"></i>
@@ -35,6 +38,4 @@ function ChatTopBar({
 	);
 }
 
-export default connect(null, { changeSmallScreenLayout, unSelectChat })(
-	ChatTopBar
-);
+export default ChatTopBar;

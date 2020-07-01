@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { apiRequestStarted } from "./api";
-import { getChatsConfig } from "./apiConfig";
+import { getChatsConfig, sendMessageConfig } from "./apiConfig";
 
 // chat Slice
 const chatSlice = createSlice({
@@ -24,6 +24,29 @@ const chatSlice = createSlice({
 		chatUnSelected: (state, action) => {
 			state.selectedChat = {};
 		},
+		sendingMessage: (state, action) => {
+			// MessageLoading = true
+		},
+		MessageSent: (state, action) => {
+			// MessageLoading = false
+
+			const selectedChatIndex = state.chats.findIndex(
+				chat => chat.id === state.selectedChat.id
+			);
+
+			state.chats[selectedChatIndex].messages = [
+				action.payload,
+				state.chats[selectedChatIndex].messages,
+			];
+
+			state.selectedChat.messages = [
+				action.payload,
+				...state.selectedChat.messages,
+			];
+		},
+		SendingMessageFailed: (state, action) => {
+			// MessageLoading = false
+		},
 	},
 });
 
@@ -35,6 +58,9 @@ const {
 	chatsRequestSuccess,
 	chatSelected,
 	chatUnSelected,
+	sendingMessage,
+	MessageSent,
+	SendingMessageFailed,
 } = chatSlice.actions;
 
 // action Creator
@@ -62,4 +88,18 @@ export const unSelectChat = () => (dispatch, getState) => {
 	dispatch({
 		type: chatUnSelected.type,
 	});
+};
+
+export const sendMessage = ({ body, chat_id }) => (dispatch, getState) => {
+	dispatch(
+		apiRequestStarted({
+			url: sendMessageConfig.url,
+			method: sendMessageConfig.method,
+			data: { chat_id, body },
+			onStart: sendingMessage.type,
+			onSuccess: MessageSent.type,
+			onError: SendingMessageFailed.type,
+			requireToken: true,
+		})
+	);
 };

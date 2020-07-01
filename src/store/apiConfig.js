@@ -11,3 +11,4 @@ export const registerConfig = {
 };
 
 export const getChatsConfig = { url: "/chat", method: "get" };
+export const sendMessageConfig = { url: "/message", method: "post" };

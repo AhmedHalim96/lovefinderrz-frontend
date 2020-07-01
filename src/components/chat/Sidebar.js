@@ -1,8 +1,14 @@
 import React from "react";
 import SidebarItem from "./SidebarItem";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-function Sidebar({ chats, showSidebar }) {
+function Sidebar() {
+	const chats = useSelector(state => state.chat.chats);
+	// const currentUser = useSelector(state => state.auth.user)
+	const showSidebar = useSelector(
+		state => state.layout.chat.smallScreensLayout.showSidebar
+	);
+
 	return (
 		<div
 			className={`chat__sidebar chat__sidebar_phone-port-${
@@ -22,9 +28,4 @@ function Sidebar({ chats, showSidebar }) {
 	);
 }
 
-const mapStateToProps = state => ({
-	currentUser: state.auth.user,
-	showSidebar: state.layout.chat.smallScreensLayout.showSidebar,
-});
-
-export default connect(mapStateToProps, {})(Sidebar);
+export default Sidebar;
