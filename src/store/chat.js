@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAction } from "@reduxjs/toolkit";
 import { apiRequestStarted } from "./api";
 import { getChatsConfig, sendMessageConfig } from "./apiConfig";
 
@@ -27,22 +27,20 @@ const chatSlice = createSlice({
 		sendingMessage: (state, action) => {
 			// MessageLoading = true
 		},
-		MessageSent: (state, action) => {
+		messageAdded: (state, action) => {
 			// MessageLoading = false
+			const { chatId, message } = action.payload;
 
-			const selectedChatIndex = state.chats.findIndex(
-				chat => chat.id === state.selectedChat.id
-			);
+			const chatIndex = state.chats.findIndex(chat => chat.id === chatId);
 
-			state.chats[selectedChatIndex].messages = [
-				action.payload,
-				state.chats[selectedChatIndex].messages,
+			state.chats[chatIndex].messages = [
+				message,
+				...state.chats[chatIndex].messages,
 			];
 
-			state.selectedChat.messages = [
-				action.payload,
-				...state.selectedChat.messages,
-			];
+			if (chatId === state.selectedChat.id) {
+				state.selectedChat.messages = [message, ...state.selectedChat.messages];
+			}
 		},
 		SendingMessageFailed: (state, action) => {
 			// MessageLoading = false
@@ -59,14 +57,14 @@ const {
 	chatSelected,
 	chatUnSelected,
 	sendingMessage,
-	MessageSent,
 	SendingMessageFailed,
+	messageAdded,
 } = chatSlice.actions;
 
 // action Creator
-
-export const getChats = () => (dispatch, getState) => {
-	dispatch(
+const messageSent = createAction("chat/messageSent");
+export const getChats = () => async (dispatch, getState) => {
+	await dispatch(
 		apiRequestStarted({
 			url: getChatsConfig.url,
 			method: getChatsConfig.method,
@@ -97,9 +95,20 @@ export const sendMessage = ({ body, chat_id }) => (dispatch, getState) => {
 			method: sendMessageConfig.method,
 			data: { chat_id, body },
 			onStart: sendingMessage.type,
-			onSuccess: MessageSent.type,
+			onSuccess: messageSent.type,
 			onError: SendingMessageFailed.type,
 			requireToken: true,
 		})
 	);
+};
+
+export const addMessage = (message, messageSender) => (dispatch, getState) => {
+	const newMessage = { ...message, user: messageSender };
+	dispatch({
+		type: messageAdded.type,
+		payload: {
+			chatId: message.chat_id,
+			message: newMessage,
+		},
+	});
 };
