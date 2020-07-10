@@ -1,4 +1,5 @@
 export const baseURL = "http://lovefinderrz.test/api/v1";
+export const avatarURL = `http://lovefinderrz.test/storage/avatars`;
 
 export const loginConfig = {
 	url: "/user/login",

@@ -101,20 +101,25 @@
 			border-radius: 50%;
 		}
 
-		&_info {
+		&_right {
+			display: flex;
 			width: 80%;
 			margin-left: 1rem;
-			display: flex;
-			align-items: stretch;
-			justify-content: space-around;
 			flex-direction: column;
+		}
+
+		&_top,
+		&_bottom {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
 		}
 
 		&_title {
 			@include flex-center;
 			justify-content: space-between;
 
-			&_username {
+			&_titlwe {
 				font-size: $default-font-size;
 				font-weight: 400;
 				color: darken($color: $color-white, $amount: 5);
@@ -130,6 +135,16 @@
 				font-size: 1.6rem;
 			}
 			color: $color-blue-light-3;
+		}
+		&_unread {
+			width: 2.5rem;
+			height: 2.5rem;
+
+			background-color: darken($color: $accent-color, $amount: 30);
+			font-size: 1.2rem;
+			box-sizing: border-box;
+			border-radius: 50%;
+			@include flex-center;
 		}
 	}
 
@@ -219,39 +234,66 @@
 		justify-content: flex-start;
 		margin-bottom: 1rem;
 		overflow-x: hidden;
-		@include scroller($bg-color);
+		& > div {
+			@include scroller($bg-color);
 
-		&:hover {
-			@include scroller-hovered($bg-color);
+			&:hover {
+				@include scroller-hovered($bg-color);
+			}
+		}
+
+		&_scroll-btn {
+			width: 3rem !important;
+			height: 3rem !important;
+			margin-bottom: 2rem;
 		}
 	}
 
 	&__message {
 		display: flex;
-		margin: 1rem 2rem;
+		margin: 0.3rem 1rem;
+		&-last {
+			margin-bottom: 1.5rem;
+		}
 		&:first-child {
 			margin-top: auto !important;
 		}
 		&_avatar {
-			width: 5rem;
-			height: 5rem;
+			display: none;
+			width: 3rem;
+			height: 3rem;
+			align-self: flex-end;
 			border-radius: 50%;
+			margin-right: 2rem;
+			&-last {
+				display: inline;
+			}
+			@include respond(tab-port) {
+				display: none;
+			}
 		}
 
 		&_body {
 			display: flex;
+			line-height: 2rem;
 			flex-direction: column;
-			min-width: 4rem;
+			min-width: 10rem;
 			position: relative;
-			padding: 1rem 1rem 0.4rem;
+			padding: 0.5rem 1rem 0;
 			max-width: 45%;
 			border-radius: 0.4rem;
-			text-align: center;
 			word-break: break-all;
 			white-space: pre-wrap;
 			background-color: lighten($bg-color, 10);
-			&-left {
-				&:after {
+			&:not(.chat__message_body-last) {
+				margin-left: 5rem;
+				@include respond(tab-port) {
+					margin-left: 0;
+				}
+			}
+			&-left,
+			&-right {
+				&.chat__message_body-last::after {
 					content: "";
 					position: absolute;
 					left: 0;
@@ -269,30 +311,40 @@
 
 			&-right {
 				background: $color-blue-light-1;
-				&:after {
-					content: "";
-					position: absolute;
-					right: 0;
-					top: 60%;
-					width: 0;
-					height: 0;
-					border: 17px solid transparent;
-					border-left-color: $color-blue-light-1;
-					border-right: 0;
-					border-bottom: 0;
-					margin-top: -8.5px;
-					margin-right: -17px;
+				&.chat__message_body-last::after {
+					border-right-color: $color-blue-light-1;
+				}
+				@include respond(tab-port) {
+					&.chat__message_body-last:after {
+						content: "";
+						position: absolute;
+						left: auto;
+						right: 0;
+						top: 60%;
+						width: 0;
+						height: 0;
+						border: 17px solid transparent;
+						border-left-color: $color-blue-light-1;
+						border-right: 0;
+						border-bottom: 0;
+						margin-top: -8.5px;
+						margin-right: -17px;
+					}
 				}
 			}
 		}
 
 		&_time {
 			color: $color-grey-light;
+			font-size: 1.1rem;
 			align-self: flex-end;
+			user-select: none;
 		}
 
 		&-right {
-			justify-content: flex-end;
+			@include respond(tab-port) {
+				justify-content: flex-end;
+			}
 		}
 	}
 

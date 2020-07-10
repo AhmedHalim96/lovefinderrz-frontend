@@ -51,22 +51,25 @@ function SidebarItem({ chat }) {
 				alt={name + "'s Avatar"}
 				className="chat__sidebarItem_avatar"
 			/>
-			<div className="chat__sidebarItem_info">
-				<div className="chat__sidebarItem_title">
-					<h2 className="chat__sidebarItem_title_username">{name}</h2>
-					<p className="chat__sidebarItem_title_date">
+			<div className="chat__sidebarItem_right">
+				<div className="chat__sidebarItem_top">
+					<h2 className="chat__sidebarItem_title">{name}</h2>
+					<p className="chat__sidebarItem_date">
 						{messages.length ? lastMessageTime : ""}
 					</p>
 				</div>
-				<p className="chat__sidebarItem_message">
-					{messages.length
-						? `${
-								currentUserId === lastMessage.user.id ? "You: " : ""
-						  } ${lastMessage.body.substr(0, 20)} ${
-								lastMessage.body.length > 20 ? "..." : ""
-						  }`
-						: "No Messages"}
-				</p>
+				<div className="chat__sidebarItem_bottom">
+					<p className="chat__sidebarItem_message">
+						{messages.length
+							? `${
+									currentUserId === lastMessage.user.id ? "You: " : ""
+							  } ${lastMessage.body.substr(0, 20)} ${
+									lastMessage.body.length > 20 ? "..." : ""
+							  }`
+							: "No Messages"}
+					</p>
+					<span className="chat__sidebarItem_unread">12</span>
+				</div>
 			</div>
 		</div>
 	);
