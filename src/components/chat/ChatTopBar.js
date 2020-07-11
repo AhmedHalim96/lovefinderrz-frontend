@@ -1,12 +1,16 @@
 import React from "react";
-import { changeSmallScreenLayout } from "../../store/layout";
+import {
+	changeSmallScreenLayout,
+	toggleProfileModal,
+} from "../../store/layout";
 import { unSelectChat } from "../../store/chat";
 import { useDispatch, useSelector } from "react-redux";
+import { viewProfile } from "../../store/profile";
 
 function ChatTopBar({ subTitle }) {
 	const dispatch = useDispatch();
-	const chatTitle = useSelector(state => state.chat.selectedChat.users[0].name);
-
+	const chattedUser = useSelector(state => state.chat.selectedChat.users[0]);
+	const chatTitle = chattedUser.name;
 	return (
 		<div className="chat__topbar">
 			<div className="chat__topbar_left">
@@ -25,7 +29,15 @@ function ChatTopBar({ subTitle }) {
 					<i className="fa fa-arrow-left"></i>
 				</button>
 				<div className="chat__topbar_title">
-					<h2 className="chat__topbar_title-main">{chatTitle}</h2>
+					<h2
+						className="chat__topbar_title-main"
+						onClick={e => {
+							dispatch(viewProfile(chattedUser));
+							dispatch(toggleProfileModal());
+						}}
+					>
+						{chatTitle}
+					</h2>
 					<span className="chat__topbar_title-sub">{subTitle}</span>
 				</div>
 			</div>

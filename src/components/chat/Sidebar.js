@@ -1,10 +1,13 @@
 import React from "react";
 import SidebarItem from "./SidebarItem";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleProfileModal } from "../../store/layout";
+import { viewProfile } from "../../store/profile";
 
 function Sidebar() {
+	const dispatch = useDispatch();
 	const chats = useSelector(state => state.chat.chats);
-	// const currentUser = useSelector(state => state.auth.user)
+	const currentUser = useSelector(state => state.auth.user);
 	const showSidebar = useSelector(
 		state => state.layout.chat.smallScreensLayout.showSidebar
 	);
@@ -16,7 +19,15 @@ function Sidebar() {
 			}`}
 		>
 			<div className="chat__sidebar_top">
-				<span className="btn btn-outline chat__sidebar_toggler">&#9776;</span>
+				<span
+					className="btn btn-outline chat__sidebar_toggler"
+					onClick={e => {
+						dispatch(viewProfile(currentUser));
+						dispatch(toggleProfileModal());
+					}}
+				>
+					<i className="fa fa-user-circle"></i>
+				</span>
 				<input type="text" placeholder="Search" className="chat__search" />
 			</div>
 			<div className="chat__recentchats">

@@ -1,0 +1,83 @@
+.profile {
+	min-width: 50rem;
+	padding: 1rem 2rem;
+	display: inline-block;
+	border-radius: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 2000;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: darken($color: $sidebar-color, $amount: 5);
+
+	&__info {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		padding-bottom: 1rem;
+		&::after {
+			content: "";
+			width: 100%;
+			border-bottom: 1px solid lighten($color: $sidebar-color, $amount: 5);
+			margin-top: 1rem;
+		}
+		&_top {
+			display: flex;
+			width: 100%;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 1.6rem;
+		}
+		&_bottom {
+			display: flex;
+			width: 100%;
+			align-items: center;
+			justify-content: flex-start;
+			margin: 2rem 0;
+
+			&_right {
+				margin-left: 1.5rem;
+				font-size: 1.3rem;
+			}
+		}
+	}
+
+	&__close {
+		font-size: 2rem;
+	}
+
+	&__avatar {
+		width: 12rem;
+		height: 12rem;
+		background-size: contain;
+		border-radius: 50%;
+	}
+	&__email {
+		color: $color-grey-light;
+	}
+
+	&__actions {
+		display: flex;
+		flex-direction: column-reverse;
+		width: 100%;
+		align-items: center;
+		padding: 2rem 0;
+	}
+	&__action {
+		font-size: 2rem;
+		width: 100%;
+		text-align: center;
+		cursor: pointer;
+		user-select: none;
+		padding: 1rem 0;
+		border-radius: 0.5rem;
+
+		&:hover {
+			background-color: darken($color: $sidebar-color, $amount: 2);
+			color: $accent-color;
+		}
+	}
+}

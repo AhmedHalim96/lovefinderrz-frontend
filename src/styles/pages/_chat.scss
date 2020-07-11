@@ -203,6 +203,7 @@
 			justify-content: center;
 			&-main {
 				font-size: 1.4rem;
+				cursor: pointer;
 
 				@include respond(tab-port) {
 					font-size: 1.6rem;

@@ -22,6 +22,7 @@ const layoutSlice = createSlice({
 				showSidebar: true,
 				showChatArea: false,
 			},
+			showProfileModal: false,
 		},
 	},
 	reducers: {
@@ -40,6 +41,12 @@ const layoutSlice = createSlice({
 			layout.chat.smallScreensLayout.showChatArea = showChatArea;
 			layout.chat.smallScreensLayout.showSidebar = showSidebar;
 		},
+		profileModalOpened: (layout, action) => {
+			layout.chat.showProfileModal = true;
+		},
+		profileModalClosed: (layout, action) => {
+			layout.chat.showProfileModal = false;
+		},
 	},
 });
 
@@ -50,6 +57,8 @@ const {
 	animatedRedirectionStarted,
 	animatedRedirectionDone,
 	smallScreensLayoutChanged,
+	profileModalClosed,
+	profileModalOpened,
 } = layoutSlice.actions;
 
 export const startAnimatedRedirection = (
@@ -79,4 +88,14 @@ export const changeSmallScreenLayout = ({ showChatArea, showSidebar }) => (
 		type: smallScreensLayoutChanged.type,
 		payload: { showChatArea, showSidebar },
 	});
+};
+
+export const toggleProfileModal = () => (dispatch, getState) => {
+	getState().layout.chat.showProfileModal
+		? dispatch({
+				type: profileModalClosed.type,
+		  })
+		: dispatch({
+				type: profileModalOpened.type,
+		  });
 };
