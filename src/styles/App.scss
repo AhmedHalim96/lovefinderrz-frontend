@@ -1,5 +1,4 @@
 // abstract
-// @import "abstract/functions";
 @import "./abstract/variables";
 @import "./abstract/mixins";
 
@@ -13,22 +12,15 @@
 @import "./components/card";
 @import "./components/logo";
 @import "./components/btn";
-// @import "components/composition";
-// @import "components/feature-box";
-// @import "components/card";
-// @import "components/story";
-// @import "components/bg-video";
 @import "./components/form";
-// @import "components/popup";
+@import "./components/circularAvatar";
 
 // layout
 @import "./layout/backdrop";
-// @import "layout/header";
-// @import "layout/grid";
-// @import "layout/footer";
 
 // pages
 @import "./pages/login";
 @import "./pages/register";
 @import "./pages/chat";
 @import "./pages/profile";
+@import "./pages/sidemenu";

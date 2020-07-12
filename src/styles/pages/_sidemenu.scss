@@ -1,0 +1,60 @@
+.sideMenu {
+	z-index: 2000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background-color: $sidebar-color;
+	width: 30rem;
+
+	&__top {
+		padding: 2rem 2rem 4rem;
+		background-color: darken($color: $accent-color, $amount: 45);
+		display: flex;
+		align-items: center;
+		align-content: center;
+		line-height: 1.4rem;
+	}
+	&__avatar {
+		width: 8rem;
+		height: 8rem;
+		margin-right: 1.2rem;
+	}
+	&__currentUserName {
+		font-size: 1.6rem;
+	}
+	&__currentUserEmail {
+		font-size: 1.2rem;
+		color: $color-grey-light;
+	}
+
+	&__actions {
+		padding: 1rem;
+		text-align: center;
+	}
+
+	&__action {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-top: 1.5rem;
+		padding-bottom: 1.5rem;
+		padding: 1.5rem 1rem;
+		font-size: 1.6rem;
+		margin-bottom: 1rem;
+		transition: all 100ms ease-in;
+		vertical-align: middle;
+		border-radius: 0.5rem;
+
+		& > .fa {
+			margin-right: 0.5rem;
+		}
+
+		&:hover {
+			color: $accent-color;
+			cursor: pointer;
+			border: 0.1rem $accent-color solid;
+			font-size: 1.8rem;
+		}
+	}
+}

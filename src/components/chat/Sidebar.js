@@ -26,7 +26,7 @@ function Sidebar() {
 						dispatch(toggleProfileModal());
 					}}
 				>
-					<i className="fa fa-user-circle"></i>
+					<i className="fa fa-bars"></i>
 				</span>
 				<input type="text" placeholder="Search" className="chat__search" />
 			</div>

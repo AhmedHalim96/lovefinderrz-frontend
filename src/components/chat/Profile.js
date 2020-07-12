@@ -24,7 +24,7 @@ export default function Profile() {
 					</div>
 					<div className="profile__info_bottom">
 						<div
-							className="profile__avatar"
+							className="circularAvatar profile__avatar"
 							style={{ backgroundImage: `url(${avatar}` }}
 						></div>
 						<div className="profile__info_bottom_right">

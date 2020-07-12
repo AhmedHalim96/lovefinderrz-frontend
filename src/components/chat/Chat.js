@@ -8,6 +8,7 @@ import { getChats, addMessage } from "../../store/chat";
 import Spinner from "../layout/Spinner";
 import TypingBar from "./TypingBar";
 import Profile from "./Profile";
+import SideMenu from "./SideMenu";
 
 class Chat extends Component {
 	componentDidMount = async () => {
@@ -25,7 +26,6 @@ class Chat extends Component {
 			selectedChat,
 			showChatArea,
 			showProfileModal,
-			currentUser,
 		} = this.props;
 
 		if (loading) return <Spinner />;
@@ -33,7 +33,6 @@ class Chat extends Component {
 		return (
 			<div className="chat">
 				<Sidebar />
-
 				<div
 					className={`chat__main chat__main_phone-port-${
 						showChatArea ? "show" : "hide"
@@ -48,6 +47,7 @@ class Chat extends Component {
 					) : null}
 				</div>
 				{showProfileModal ? <Profile /> : null}
+				<SideMenu />
 			</div>
 		);
 	}
@@ -55,7 +55,6 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
 	loading: state.chat.loading,
-	currentUser: state.auth.user,
 	chats: state.chat.chats,
 	selectedChat: state.chat.selectedChat,
 	showChatArea: state.layout.chat.smallScreensLayout.showChatArea,
