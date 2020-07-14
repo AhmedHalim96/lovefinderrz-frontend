@@ -26,6 +26,7 @@ class Chat extends Component {
 			selectedChat,
 			showChatArea,
 			showProfileModal,
+			showSideMenu,
 		} = this.props;
 
 		if (loading) return <Spinner />;
@@ -47,7 +48,7 @@ class Chat extends Component {
 					) : null}
 				</div>
 				{showProfileModal ? <Profile /> : null}
-				<SideMenu />
+				{showSideMenu ? <SideMenu /> : null}
 			</div>
 		);
 	}
@@ -59,6 +60,7 @@ const mapStateToProps = state => ({
 	selectedChat: state.chat.selectedChat,
 	showChatArea: state.layout.chat.smallScreensLayout.showChatArea,
 	showProfileModal: state.layout.chat.showProfileModal,
+	showSideMenu: state.layout.sideMenu.isVisible,
 });
 
 export default connect(mapStateToProps, { getChats, addMessage })(Chat);

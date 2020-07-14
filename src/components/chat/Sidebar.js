@@ -1,13 +1,11 @@
 import React from "react";
 import SidebarItem from "./SidebarItem";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleProfileModal } from "../../store/layout";
-import { viewProfile } from "../../store/profile";
+import { toggleSideMenu } from "../../store/layout";
 
 function Sidebar() {
 	const dispatch = useDispatch();
 	const chats = useSelector(state => state.chat.chats);
-	const currentUser = useSelector(state => state.auth.user);
 	const showSidebar = useSelector(
 		state => state.layout.chat.smallScreensLayout.showSidebar
 	);
@@ -22,8 +20,7 @@ function Sidebar() {
 				<span
 					className="btn btn-outline chat__sidebar_toggler"
 					onClick={e => {
-						dispatch(viewProfile(currentUser));
-						dispatch(toggleProfileModal());
+						dispatch(toggleSideMenu());
 					}}
 				>
 					<i className="fa fa-bars"></i>

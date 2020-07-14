@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 // Layout Slice
 
 const layoutSlice = createSlice({
@@ -24,6 +23,10 @@ const layoutSlice = createSlice({
 			},
 			showProfileModal: false,
 		},
+		sideMenu: {
+			isVisible: false,
+			closing: false,
+		},
 	},
 	reducers: {
 		animatedRedirectionStarted: (layout, action) => {
@@ -47,6 +50,16 @@ const layoutSlice = createSlice({
 		profileModalClosed: (layout, action) => {
 			layout.chat.showProfileModal = false;
 		},
+		sideMenuOpened: (layout, action) => {
+			layout.sideMenu.isVisible = true;
+		},
+		sideMenuClosing: (layout, actions) => {
+			layout.sideMenu.closing = true;
+		},
+		sideMenuClosed: (layout, action) => {
+			layout.sideMenu.isVisible = false;
+			layout.sideMenu.closing = false;
+		},
 	},
 });
 
@@ -59,6 +72,9 @@ const {
 	smallScreensLayoutChanged,
 	profileModalClosed,
 	profileModalOpened,
+	sideMenuClosing,
+	sideMenuClosed,
+	sideMenuOpened,
 } = layoutSlice.actions;
 
 export const startAnimatedRedirection = (
@@ -98,4 +114,21 @@ export const toggleProfileModal = () => (dispatch, getState) => {
 		: dispatch({
 				type: profileModalOpened.type,
 		  });
+};
+
+export const toggleSideMenu = () => async (dispatch, getState) => {
+	if (getState().layout.sideMenu.isVisible) {
+		dispatch({
+			type: sideMenuClosing.type,
+		});
+
+		await setTimeout(() => {
+			dispatch({
+				type: sideMenuClosed.type,
+			});
+		}, 500);
+	} else
+		dispatch({
+			type: sideMenuOpened.type,
+		});
 };
