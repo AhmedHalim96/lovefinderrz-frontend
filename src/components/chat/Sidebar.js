@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import SidebarItem from "./SidebarItem";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSideMenu } from "../../store/layout";
+// import { viewProfileByEmail } from "../../store/profile";
 
 function Sidebar() {
 	const dispatch = useDispatch();
@@ -9,6 +10,7 @@ function Sidebar() {
 	const showSidebar = useSelector(
 		state => state.layout.chat.smallScreensLayout.showSidebar
 	);
+	const [query, setQuery] = useState("");
 
 	return (
 		<div
@@ -25,7 +27,20 @@ function Sidebar() {
 				>
 					<i className="fa fa-bars"></i>
 				</span>
-				<input type="text" placeholder="Search" className="chat__search" />
+				<input
+					type="text"
+					placeholder="Search"
+					className="chat__search"
+					onChange={e => {
+						const val = e.target.value;
+						setQuery(val);
+					}}
+					onKeyUp={e => {
+						if (e.key === "Enter" && query) {
+							// dispatch(viewProfileByEmail(query));
+						}
+					}}
+				/>
 			</div>
 			<div className="chat__recentchats">
 				{chats.map((chat, i) => {

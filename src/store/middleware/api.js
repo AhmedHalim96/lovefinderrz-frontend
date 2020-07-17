@@ -11,6 +11,7 @@ const api = ({ dispatch, getState }) => next => async action => {
 		data,
 		onStart,
 		onSuccess,
+		afterSuccess,
 		onError,
 		requireToken,
 	} = action.payload;
@@ -35,6 +36,7 @@ const api = ({ dispatch, getState }) => next => async action => {
 		.then(res => {
 			dispatch(apiRequestSuccess(res.data));
 			if (onSuccess) dispatch({ type: onSuccess, payload: res.data });
+			if (afterSuccess) dispatch({ type: afterSuccess, payload: res.data });
 		})
 		.catch(err => {
 			console.log(err.response.data);

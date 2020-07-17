@@ -9,6 +9,7 @@ import Spinner from "../layout/Spinner";
 import TypingBar from "./TypingBar";
 import Profile from "./Profile";
 import SideMenu from "./SideMenu";
+import EmailModal from "./EmailModal";
 
 class Chat extends Component {
 	componentDidMount = async () => {
@@ -27,6 +28,7 @@ class Chat extends Component {
 			showChatArea,
 			showProfileModal,
 			showSideMenu,
+			showEmailModal,
 		} = this.props;
 
 		if (loading) return <Spinner />;
@@ -49,6 +51,7 @@ class Chat extends Component {
 				</div>
 				{showProfileModal ? <Profile /> : null}
 				{showSideMenu ? <SideMenu /> : null}
+				{showEmailModal ? <EmailModal /> : null}
 			</div>
 		);
 	}
@@ -60,6 +63,7 @@ const mapStateToProps = state => ({
 	selectedChat: state.chat.selectedChat,
 	showChatArea: state.layout.chat.smallScreensLayout.showChatArea,
 	showProfileModal: state.layout.chat.showProfileModal,
+	showEmailModal: state.layout.emailModal.isVisible,
 	showSideMenu: state.layout.sideMenu.isVisible,
 });
 

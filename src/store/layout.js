@@ -27,6 +27,9 @@ const layoutSlice = createSlice({
 			isVisible: false,
 			closing: false,
 		},
+		emailModal: {
+			isVisible: false,
+		},
 	},
 	reducers: {
 		animatedRedirectionStarted: (layout, action) => {
@@ -60,6 +63,12 @@ const layoutSlice = createSlice({
 			layout.sideMenu.isVisible = false;
 			layout.sideMenu.closing = false;
 		},
+		emailModalOpened: (layout, action) => {
+			layout.emailModal.isVisible = true;
+		},
+		emailModalClosed: (layout, action) => {
+			layout.emailModal.isVisible = false;
+		},
 	},
 });
 
@@ -71,11 +80,14 @@ const {
 	animatedRedirectionDone,
 	smallScreensLayoutChanged,
 	profileModalClosed,
-	profileModalOpened,
 	sideMenuClosing,
 	sideMenuClosed,
 	sideMenuOpened,
+	emailModalClosed,
+	emailModalOpened,
 } = layoutSlice.actions;
+
+export const { profileModalOpened } = layoutSlice.actions;
 
 export const startAnimatedRedirection = (
 	currentPage,
@@ -131,4 +143,14 @@ export const toggleSideMenu = () => async (dispatch, getState) => {
 		dispatch({
 			type: sideMenuOpened.type,
 		});
+};
+
+export const togglEmailModal = () => (dispatch, getState) => {
+	getState().layout.emailModal.isVisible
+		? dispatch({
+				type: emailModalClosed.type,
+		  })
+		: dispatch({
+				type: emailModalOpened.type,
+		  });
 };

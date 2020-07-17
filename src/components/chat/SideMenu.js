@@ -3,7 +3,11 @@ import Backdrop from "../layout/Backdrop";
 import { useDispatch, useSelector } from "react-redux";
 import { avatarURL } from "../../store/apiConfig";
 import { viewProfile } from "../../store/profile";
-import { toggleProfileModal, toggleSideMenu } from "../../store/layout";
+import {
+	toggleProfileModal,
+	toggleSideMenu,
+	togglEmailModal,
+} from "../../store/layout";
 
 export default function SideMenu() {
 	const dispatch = useDispatch();
@@ -38,8 +42,14 @@ export default function SideMenu() {
 					>
 						<i className="fa fa-user-circle-o fa-2x"></i> View Profile
 					</div>
-					<div className="sideMenu__action">
-						<i className="fa fa-envelope-o fa-2x"></i> Start New Chat
+					<div
+						className="sideMenu__action"
+						onClick={e => {
+							dispatch(toggleSideMenu());
+							dispatch(togglEmailModal());
+						}}
+					>
+						<i className="fa fa-envelope-o fa-2x"></i> Start New Chat with Email
 					</div>
 				</div>
 			</div>

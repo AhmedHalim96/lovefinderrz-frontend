@@ -14,7 +14,6 @@ function ChatTopBar({ subTitle }) {
 	return (
 		<div className="chat__topbar">
 			<div className="chat__topbar_left">
-				5
 				<button
 					className="btn btn-outline chat__topbar_back"
 					onClick={e => {

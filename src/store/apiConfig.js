@@ -11,5 +11,10 @@ export const registerConfig = {
 	method: "post",
 };
 
+export const profileSearchConfig = {
+	url: "/user/",
+	method: "get",
+};
+
 export const getChatsConfig = { url: "/chat", method: "get" };
 export const sendMessageConfig = { url: "/message", method: "post" };
