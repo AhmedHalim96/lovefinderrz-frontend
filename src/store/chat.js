@@ -1,17 +1,28 @@
 import { createSlice, createAction } from "@reduxjs/toolkit";
 import { apiRequestStarted } from "./api";
-import { getChatsConfig, sendMessageConfig } from "./apiConfig";
+import {
+	getChatsConfig,
+	sendMessageConfig,
+	createChatConfig,
+} from "./apiConfig";
 
 // chat Slice
 const chatSlice = createSlice({
 	name: "chat",
-	initialState: { chats: [], loading: false, error: {}, selectedChat: {} },
+	initialState: {
+		chats: [],
+		loading: false,
+		loaded: false,
+		error: {},
+		selectedChat: {},
+	},
 	reducers: {
 		chatsRequested: (state, action) => {
 			state.loading = true;
 		},
 		chatsRequestSuccess: (state, action) => {
 			state.loading = false;
+			state.loaded = true;
 			state.chats = action.payload;
 		},
 		chatsRequestFailed: (state, action) => {
@@ -45,6 +56,18 @@ const chatSlice = createSlice({
 		SendingMessageFailed: (state, action) => {
 			// MessageLoading = false
 		},
+		creatingChatRequested: (state, action) => {
+			state.loading = true;
+		},
+
+		chatCreated: (state, action) => {
+			state.loading = false;
+			state.chats = [...state.chats, action.payload];
+			state.selectedChat = action.payload;
+		},
+		creatingChatFailed: (state, action) => {
+			state.loading = false;
+		},
 	},
 });
 
@@ -59,6 +82,9 @@ const {
 	sendingMessage,
 	SendingMessageFailed,
 	messageAdded,
+	creatingChatRequested,
+	chatCreated,
+	creatingChatFailed,
 } = chatSlice.actions;
 
 // action Creator
@@ -111,4 +137,18 @@ export const addMessage = (message, messageSender) => (dispatch, getState) => {
 			message: newMessage,
 		},
 	});
+};
+
+export const startChat = user_id => async (dispatch, getState) => {
+	await dispatch(
+		apiRequestStarted({
+			url: createChatConfig.url,
+			method: createChatConfig.method,
+			data: { user_id },
+			onStart: creatingChatRequested.type,
+			onSuccess: chatCreated.type,
+			onError: creatingChatFailed.type,
+			requireToken: true,
+		})
+	);
 };

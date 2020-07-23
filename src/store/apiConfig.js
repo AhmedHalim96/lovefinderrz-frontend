@@ -18,3 +18,7 @@ export const profileSearchConfig = {
 
 export const getChatsConfig = { url: "/chat", method: "get" };
 export const sendMessageConfig = { url: "/message", method: "post" };
+export const createChatConfig = {
+	url: "/chat",
+	method: "post",
+};

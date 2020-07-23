@@ -39,9 +39,13 @@ const api = ({ dispatch, getState }) => next => async action => {
 			if (afterSuccess) dispatch({ type: afterSuccess, payload: res.data });
 		})
 		.catch(err => {
-			console.log(err.response.data);
-			dispatch(apiRequestFailed(err.res));
-			if (onError) dispatch({ type: onError, payload: err.response.data });
+			console.log(err.message);
+			dispatch(apiRequestFailed(err.message));
+			if (onError)
+				dispatch({
+					type: onError,
+					payload: err.response ? err.response.data : err.message,
+				});
 		});
 };
 

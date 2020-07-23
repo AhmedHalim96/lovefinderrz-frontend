@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { getChats, addMessage } from "../../store/chat";
 import Spinner from "../layout/Spinner";
 import TypingBar from "./TypingBar";
-import Profile from "./Profile";
+import ProfileModal from "./ProfileModal";
 import SideMenu from "./SideMenu";
 import EmailModal from "./EmailModal";
 
@@ -29,9 +29,10 @@ class Chat extends Component {
 			showProfileModal,
 			showSideMenu,
 			showEmailModal,
+			loaded,
 		} = this.props;
 
-		if (loading) return <Spinner />;
+		if (loading && !loaded) return <Spinner />;
 
 		return (
 			<div className="chat">
@@ -49,7 +50,7 @@ class Chat extends Component {
 						</React.Fragment>
 					) : null}
 				</div>
-				{showProfileModal ? <Profile /> : null}
+				{showProfileModal ? <ProfileModal /> : null}
 				{showSideMenu ? <SideMenu /> : null}
 				{showEmailModal ? <EmailModal /> : null}
 			</div>
@@ -60,6 +61,7 @@ class Chat extends Component {
 const mapStateToProps = state => ({
 	loading: state.chat.loading,
 	chats: state.chat.chats,
+	loaded: state.chat.loaded,
 	selectedChat: state.chat.selectedChat,
 	showChatArea: state.layout.chat.smallScreensLayout.showChatArea,
 	showProfileModal: state.layout.chat.showProfileModal,

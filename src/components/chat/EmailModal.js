@@ -14,7 +14,6 @@ export default function EmailModal() {
 	const formSubmit = async e => {
 		e.preventDefault();
 		if (query) {
-			// BUG Funcky Error beahvior
 			if (emailValidator.validate(query)) {
 				await dispatch(viewProfileByEmail(query));
 				if (apiError) setError(apiError);

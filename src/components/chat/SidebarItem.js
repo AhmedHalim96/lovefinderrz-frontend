@@ -12,7 +12,7 @@ function SidebarItem({ chat }) {
 	let { id, messages } = chat;
 	let lastMessage = messages[0];
 	let lastMessageTime;
-	if (lastMessage.id) {
+	if (messages.length) {
 		const lastMessageMoment = moment(lastMessage.created_at);
 		if (moment().day() !== lastMessageMoment.day()) {
 			lastMessageTime = `${

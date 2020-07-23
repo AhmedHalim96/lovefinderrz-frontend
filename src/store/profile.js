@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
 import { apiRequestStarted } from "./api";
 import { profileSearchConfig } from "../store/apiConfig";
 import { profileModalOpened } from "./layout";
@@ -58,3 +59,9 @@ export const viewProfileByEmail = email => async (dispatch, getState) => {
 		})
 	);
 };
+
+// Selectors
+export const getContacts = createSelector(
+	state => state.chat.chats,
+	chats => chats.map(chat => chat.users[0])
+);
