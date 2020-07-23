@@ -1,14 +1,15 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectChat } from "../../store/chat";
+import { selectChat, addMessage } from "../../store/chat";
 import moment from "moment";
 import { changeSmallScreenLayout } from "../../store/layout";
+import echo from "../../laravelEcho";
+import { useEffect } from "react";
 
 function SidebarItem({ chat }) {
 	const dispatch = useDispatch();
 	const currentUserId = useSelector(state => state.auth.user.id);
 	const selectedChatId = useSelector(state => state.chat.selectedChat.id);
-
 	let { id, messages } = chat;
 	let lastMessage = messages[0];
 	let lastMessageTime;
@@ -31,6 +32,12 @@ function SidebarItem({ chat }) {
 	let name = chat.users[0].name;
 	let avatar = chat.users[0].avatar;
 	let selected = selectedChatId === id;
+
+	useEffect(() => {
+		echo.channel("chat_" + chat.id).listen("NewMessage", res => {
+			dispatch(addMessage(res.message, res.messageSender));
+		});
+	}, [chat.id, dispatch]);
 
 	return (
 		<div

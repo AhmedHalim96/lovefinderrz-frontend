@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Sidebar from "./Sidebar";
-import echo from "../../laravelEcho";
+// import echo from "../../laravelEcho";
 import MessagesArea from "./MessagesArea";
 import ChatTopBar from "./ChatTopBar";
 import { connect } from "react-redux";
@@ -12,13 +12,13 @@ import SideMenu from "./SideMenu";
 import EmailModal from "./EmailModal";
 
 class Chat extends Component {
-	componentDidMount = async () => {
-		await this.props.getChats();
-		this.props.chats.map(chat =>
-			echo.channel("chat_" + chat.id).listen("NewMessage", res => {
-				this.props.addMessage(res.message, res.messageSender);
-			})
-		);
+	componentDidMount = () => {
+		this.props.getChats();
+		// this.props.chats.map(chat =>
+		// 	echo.channel("chat_" + chat.id).listen("NewMessage", res => {
+		// 		this.props.addMessage(res.message, res.messageSender);
+		// 	})
+		// );
 	};
 
 	render() {
