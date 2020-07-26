@@ -1,4 +1,4 @@
-import { createSlice, createAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { apiRequestStarted } from "./api";
 import {
 	getChatsConfig,
@@ -38,6 +38,26 @@ const chatSlice = createSlice({
 		sendingMessage: (state, action) => {
 			// MessageLoading = true
 		},
+		messageSent: (state, action) => {
+			// MessageLoading = false
+			const message = action.payload;
+			const chatIndex = state.chats.findIndex(
+				chat => chat.id === message.chat_id
+			);
+
+			state.chats[chatIndex].messages = [
+				message,
+				...state.chats[chatIndex].messages,
+			];
+
+			if (message.chat_id === state.selectedChat.id) {
+				state.selectedChat.messages = [message, ...state.selectedChat.messages];
+			}
+		},
+
+		SendingMessageFailed: (state, action) => {
+			// MessageLoading = false
+		},
 		messageAdded: (state, action) => {
 			// MessageLoading = false
 			const { chatId, message } = action.payload;
@@ -52,9 +72,6 @@ const chatSlice = createSlice({
 			if (chatId === state.selectedChat.id) {
 				state.selectedChat.messages = [message, ...state.selectedChat.messages];
 			}
-		},
-		SendingMessageFailed: (state, action) => {
-			// MessageLoading = false
 		},
 		creatingChatRequested: (state, action) => {
 			state.loading = true;
@@ -83,6 +100,7 @@ const {
 	chatSelected,
 	chatUnSelected,
 	sendingMessage,
+	messageSent,
 	SendingMessageFailed,
 	messageAdded,
 	creatingChatRequested,
@@ -92,7 +110,6 @@ const {
 } = chatSlice.actions;
 
 // action Creator
-const messageSent = createAction("chat/messageSent");
 export const getChats = () => async (dispatch, getState) => {
 	await dispatch(
 		apiRequestStarted({
