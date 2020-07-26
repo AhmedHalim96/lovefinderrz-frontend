@@ -8,6 +8,7 @@ import {
 	togglEmailModal,
 } from "../../store/layout";
 import CircularAvatar from "../layout/CircularAvatar";
+import { logOutUser } from "../../store/auth";
 
 export default function SideMenu() {
 	const dispatch = useDispatch();
@@ -49,6 +50,15 @@ export default function SideMenu() {
 						}}
 					>
 						<i className="fa fa-envelope-o fa-2x"></i> Start New Chat with Email
+					</div>
+
+					<div
+						className="sideMenu__action"
+						onClick={e => {
+							dispatch(logOutUser());
+						}}
+					>
+						<i className="fa fa-sign-out fa-2x"></i> logout
 					</div>
 				</div>
 			</div>

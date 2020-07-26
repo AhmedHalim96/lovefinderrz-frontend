@@ -72,6 +72,11 @@ const authSlice = createSlice({
 				state.errors.register.errorTarget = target;
 			}
 		},
+		userLoggedOut: (state, action) => {
+			state.user = {};
+			state.authenticated = false;
+			state.token = null;
+		},
 	},
 });
 
@@ -87,6 +92,7 @@ const {
 	fetchingStoredUser,
 	fetchingStoredUserSuccess,
 	fetchingStoredUserFailed,
+	userLoggedOut,
 } = authSlice.actions;
 
 // Action Creators
@@ -154,4 +160,12 @@ export const registerUser = (name, email, password, avatar) => (
 			onError: userRegisterFailed.type,
 		})
 	);
+};
+
+export const logOutUser = () => (dispatch, getState) => {
+	localStorage.removeItem("user");
+	localStorage.removeItem("token");
+	dispatch({
+		type: userLoggedOut.type,
+	});
 };
