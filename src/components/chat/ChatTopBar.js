@@ -9,7 +9,10 @@ import { viewProfile } from "../../store/profile";
 
 function ChatTopBar({ subTitle }) {
 	const dispatch = useDispatch();
-	const chattedUser = useSelector(state => state.chat.selectedChat.users[0]);
+	const currentUserId = useSelector(state => state.auth.user.id);
+	const chattedUser = useSelector(
+		state => state.chat.selectedChat.users
+	).filter(user => user.id !== currentUserId)[0];
 	const chatTitle = chattedUser.name;
 	return (
 		<div className="chat__topbar">
