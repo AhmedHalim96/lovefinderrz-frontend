@@ -68,6 +68,9 @@ const chatSlice = createSlice({
 		creatingChatFailed: (state, action) => {
 			state.loading = false;
 		},
+		chatAdded: (state, action) => {
+			state.chats = [action.payload.chat, ...state.chats];
+		},
 	},
 });
 
@@ -85,6 +88,7 @@ const {
 	creatingChatRequested,
 	chatCreated,
 	creatingChatFailed,
+	chatAdded,
 } = chatSlice.actions;
 
 // action Creator
@@ -139,16 +143,24 @@ export const addMessage = (message, messageSender) => (dispatch, getState) => {
 	});
 };
 
-export const startChat = user_id => async (dispatch, getState) => {
+export const startChat = (user_id, message) => async (dispatch, getState) => {
 	await dispatch(
 		apiRequestStarted({
 			url: createChatConfig.url,
 			method: createChatConfig.method,
-			data: { user_id },
+			data: { user_id, message },
 			onStart: creatingChatRequested.type,
 			onSuccess: chatCreated.type,
 			onError: creatingChatFailed.type,
 			requireToken: true,
 		})
 	);
+};
+export const addChat = chat => (dispatch, getState) => {
+	dispatch({
+		type: chatAdded.type,
+		payload: {
+			chat,
+		},
+	});
 };

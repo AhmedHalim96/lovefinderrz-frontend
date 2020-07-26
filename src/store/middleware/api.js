@@ -1,6 +1,7 @@
 import axios from "axios";
 import { apiRequestStarted, apiRequestSuccess, apiRequestFailed } from "../api";
 import { baseURL } from "../apiConfig";
+import echo from "../../laravelEcho";
 
 const api = ({ dispatch, getState }) => next => async action => {
 	if (action.type !== apiRequestStarted.type) return next(action);
@@ -16,7 +17,7 @@ const api = ({ dispatch, getState }) => next => async action => {
 		requireToken,
 	} = action.payload;
 
-	let headers = { Accept: "application/json" };
+	let headers = { Accept: "application/json", "X-Socket-Id": echo.socketId() };
 	if (requireToken) {
 		const token = getState().auth.token;
 		headers = { ...headers, Authorization: "Bearer " + token };
@@ -40,6 +41,7 @@ const api = ({ dispatch, getState }) => next => async action => {
 		})
 		.catch(err => {
 			console.log(err.message);
+			console.log(err);
 			dispatch(apiRequestFailed(err.message));
 			if (onError)
 				dispatch({

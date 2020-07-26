@@ -30,8 +30,10 @@ function SidebarItem({ chat }) {
 			}`;
 		}
 	}
-	let name = chat.users[0].name;
-	let avatar = chat.users[0].avatar;
+
+	let selecteduser = chat.users.filter(user => user.id !== currentUserId)[0];
+	let name = selecteduser.name;
+	let avatar = selecteduser.avatar;
 	let selected = selectedChatId === id;
 
 	useEffect(() => {

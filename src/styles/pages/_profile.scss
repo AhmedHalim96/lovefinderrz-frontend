@@ -60,21 +60,28 @@
 		display: flex;
 		flex-direction: column-reverse;
 		width: 100%;
-		align-items: center;
+		align-items: flex-start;
 		padding: 2rem 0;
 	}
 	&__action {
 		font-size: 2rem;
 		width: 100%;
-		text-align: center;
-		cursor: pointer;
 		user-select: none;
-		padding: 1rem 0;
+		padding: 0.5rem;
+
 		border-radius: 0.5rem;
 
-		&:hover {
-			background-color: darken($color: $sidebar-color, $amount: 2);
-			color: $accent-color;
+		&_input {
+			width: 70%;
+			padding-right: 3.5rem;
+		}
+
+		&_btn {
+			font-size: 2rem;
+			margin-left: -3rem;
+			&:hover {
+				color: $accent-color;
+			}
 		}
 	}
 }

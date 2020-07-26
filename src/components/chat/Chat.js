@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Sidebar from "./Sidebar";
-// import echo from "../../laravelEcho";
+import echo from "../../laravelEcho";
 import MessagesArea from "./MessagesArea";
 import ChatTopBar from "./ChatTopBar";
 import { connect } from "react-redux";
-import { getChats, addMessage } from "../../store/chat";
+import { getChats, addMessage, addChat } from "../../store/chat";
 import Spinner from "../layout/Spinner";
 import TypingBar from "./TypingBar";
 import ProfileModal from "./ProfileModal";
@@ -14,11 +14,10 @@ import EmailModal from "./EmailModal";
 class Chat extends Component {
 	componentDidMount = () => {
 		this.props.getChats();
-		// this.props.chats.map(chat =>
-		// 	echo.channel("chat_" + chat.id).listen("NewMessage", res => {
-		// 		this.props.addMessage(res.message, res.messageSender);
-		// 	})
-		// );
+
+		echo.channel("newChat").listen("NewChat", res => {
+			this.props.addChat(res.new_chat);
+		});
 	};
 
 	render() {
@@ -69,4 +68,6 @@ const mapStateToProps = state => ({
 	showSideMenu: state.layout.sideMenu.isVisible,
 });
 
-export default connect(mapStateToProps, { getChats, addMessage })(Chat);
+export default connect(mapStateToProps, { getChats, addMessage, addChat })(
+	Chat
+);

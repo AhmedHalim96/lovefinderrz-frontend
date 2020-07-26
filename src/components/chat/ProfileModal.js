@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Backdrop from "../layout/Backdrop";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleProfileModal } from "../../store/layout";
 import Spinner from "../layout/Spinner";
-import { avatarURL } from "../../store/apiConfig";
 import { getContacts } from "../../store/profile";
 import { startChat } from "../../store/chat";
+import CircularAvatar from "../layout/CircularAvatar";
 
 export default function ProfileModal() {
 	const dispatch = useDispatch();
@@ -15,9 +15,9 @@ export default function ProfileModal() {
 	const contactIds = useSelector(state => getContacts(state)).map(
 		contact => contact.id
 	);
-
 	const chatExist = contactIds.includes(user.id);
-	const avatar = avatarURL + "/" + user.avatar;
+	const [msg, setMsg] = useState("");
+
 	if (loading) return <Spinner />;
 	return (
 		<React.Fragment>
@@ -34,10 +34,10 @@ export default function ProfileModal() {
 						</span>
 					</div>
 					<div className="profile__info_bottom">
-						<div
-							className="circularAvatar profile__avatar"
-							style={{ backgroundImage: `url(${avatar}` }}
-						></div>
+						<CircularAvatar
+							avatarImage={user.avatar}
+							className="profile__avatar"
+						/>
 						<div className="profile__info_bottom_right">
 							<h2 className="profile__username">{user.name}</h2>
 							<span className="profile__email">Email:{user.email}</span>
@@ -46,15 +46,26 @@ export default function ProfileModal() {
 				</div>
 				<div className="profile__actions">
 					{currentUserId !== user.id && !chatExist ? (
-						<div
-							className="profile__action"
-							onClick={async e => {
-								await dispatch(startChat(user.id));
-								dispatch(toggleProfileModal());
-							}}
-						>
-							<i className="fa fa-send"></i> Send Message
-						</div>
+						<React.Fragment>
+							<div className="profile__action">
+								<input
+									type="text"
+									className="form__input profile__action_input"
+									placeholder="Send Your First Message....."
+									value={msg}
+									onChange={e => setMsg(e.target.value)}
+								/>
+								<button
+									className="btn btn-outline profile__action_btn"
+									onClick={async e => {
+										await dispatch(startChat(user.id, msg));
+										dispatch(toggleProfileModal());
+									}}
+								>
+									<i className="fa fa-send"></i>
+								</button>
+							</div>
+						</React.Fragment>
 					) : null}
 				</div>
 			</div>
