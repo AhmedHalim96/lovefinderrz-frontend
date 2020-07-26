@@ -5,6 +5,7 @@ import moment from "moment";
 import { changeSmallScreenLayout } from "../../store/layout";
 import echo from "../../laravelEcho";
 import { useEffect } from "react";
+import CircularAvatar from "../layout/CircularAvatar";
 
 function SidebarItem({ chat }) {
 	const dispatch = useDispatch();
@@ -53,10 +54,9 @@ function SidebarItem({ chat }) {
 				}
 			}}
 		>
-			<img
-				src={`http://lovefinderrz.test/storage/avatars/${avatar}`}
-				alt={name + "'s Avatar"}
+			<CircularAvatar
 				className="chat__sidebarItem_avatar"
+				avatarImage={avatar}
 			/>
 			<div className="chat__sidebarItem_right">
 				<div className="chat__sidebarItem_top">

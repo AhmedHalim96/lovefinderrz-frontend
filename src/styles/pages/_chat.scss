@@ -98,9 +98,8 @@
 		}
 
 		&_avatar {
-			width: 6rem;
-			height: auto;
-			border-radius: 50%;
+			min-width: 6rem;
+			min-height: 6rem;
 		}
 
 		&_right {
@@ -228,17 +227,20 @@
 
 	&__messages {
 		flex-basis: 87.5%;
+
 		@include respond(tab-port) {
 			flex-basis: 90%;
 		}
+
 		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
 		margin-bottom: 1rem;
-		overflow-x: hidden;
+
 		& > div {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
 			@include scroller($bg-color);
+			overflow-x: hidden;
 
 			&:hover {
 				@include scroller-hovered($bg-color);
@@ -361,8 +363,8 @@
 		&_attachment,
 		&_submit,
 		&_emoji {
-			align-self: flex-end;
-
+			align-self: start;
+			margin-top: 1rem;
 			flex: 1;
 			font-size: 2.5rem;
 			color: $color-grey-dark;
@@ -398,6 +400,7 @@
 
 		&_submit {
 			margin-bottom: 1.1rem;
+			align-self: end;
 		}
 	}
 }

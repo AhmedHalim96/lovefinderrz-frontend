@@ -1,29 +1,28 @@
 import React from "react";
 import Backdrop from "../layout/Backdrop";
 import { useDispatch, useSelector } from "react-redux";
-import { avatarURL } from "../../store/apiConfig";
 import { viewProfile } from "../../store/profile";
 import {
 	toggleProfileModal,
 	toggleSideMenu,
 	togglEmailModal,
 } from "../../store/layout";
+import CircularAvatar from "../layout/CircularAvatar";
 
 export default function SideMenu() {
 	const dispatch = useDispatch();
 	const closing = useSelector(state => state.layout.sideMenu.closing);
 	const currentUser = useSelector(state => state.auth.user);
-	const avatar = avatarURL + "/" + currentUser.avatar;
 
 	return (
 		<React.Fragment>
 			{!closing ? <Backdrop close={e => dispatch(toggleSideMenu())} /> : null}
 			<div className={`sideMenu ${closing ? "u-slide-left" : "u-slide-right"}`}>
 				<div className="sideMenu__top">
-					<div
-						className="circularAvatar sideMenu__avatar"
-						style={{ backgroundImage: `url(${avatar}` }}
-					></div>
+					<CircularAvatar
+						className="sideMenu__avatar"
+						avatarImage={currentUser.avatar}
+					/>
 					<div className="sideMenu__currentUserInfo">
 						<h3 className="sideMenu__currentUserName">{currentUser.name}</h3>
 						<span className="sideMenu__currentUserEmail">

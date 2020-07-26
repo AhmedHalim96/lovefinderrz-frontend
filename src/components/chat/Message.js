@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { avatarURL } from "../../store/apiConfig";
+import CircularAvatar from "../layout/CircularAvatar";
 
 export default function Message({
 	senderAvatar,
@@ -18,12 +18,11 @@ export default function Message({
 				isLastMessageBySameUser ? "chat__message-last" : ""
 			}`}
 		>
-			<img
-				src={`${avatarURL}/${senderAvatar}`}
-				alt={senderName + " avatar"}
+			<CircularAvatar
 				className={`chat__message_avatar ${
 					isLastMessageBySameUser ? "chat__message_avatar-last" : ""
 				}`}
+				avatarImage={senderAvatar}
 			/>
 			<div
 				className={`chat__message_body ${
