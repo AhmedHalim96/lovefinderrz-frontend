@@ -12,7 +12,7 @@ export default function ProfileModal() {
 	const user = useSelector(state => state.profile.profileBeingViewed);
 	const loading = useSelector(state => state.chat.loading);
 	const currentUserId = useSelector(state => state.auth.user.id);
-	const contactIds = useSelector(state => getContacts(state)).map(
+	const contactIds = useSelector(state => state.auth.user.contacts).map(
 		contact => contact.id
 	);
 	const chatExist = contactIds.includes(user.id);

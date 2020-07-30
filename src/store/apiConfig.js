@@ -22,3 +22,8 @@ export const createChatConfig = {
 	url: "/chat",
 	method: "post",
 };
+
+export const userStatusConfig = {
+	url: "/user",
+	method: "put",
+};

@@ -202,18 +202,30 @@
 			flex-direction: column;
 			align-items: flex-start;
 			justify-content: center;
-			&-main {
-				font-size: 1.4rem;
+			&_user {
+				font-size: 1.6rem;
 				cursor: pointer;
 
 				@include respond(tab-port) {
-					font-size: 1.6rem;
+					font-size: 1.8rem;
 				}
 				font-weight: 400;
 			}
-			&-sub {
-				&_subtitle {
+			&_status {
+				font-size: 1.2rem;
+				&,
+				& > i {
+					transition: all ease-out 500ms;
+				}
+
+				&-offline {
 					color: $color-grey-light;
+				}
+				&-online {
+					color: $color-white;
+					& > i {
+						color: lightgreen;
+					}
 				}
 			}
 		}
@@ -231,6 +243,7 @@
 		@include respond(tab-port) {
 			flex-basis: 90%;
 		}
+		@include scroller($bg-color);
 
 		width: 100%;
 		margin-bottom: 1rem;
@@ -239,7 +252,6 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-start;
-			@include scroller($bg-color);
 			overflow-x: hidden;
 
 			&:hover {

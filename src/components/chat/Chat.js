@@ -10,9 +10,16 @@ import TypingBar from "./TypingBar";
 import ProfileModal from "./ProfileModal";
 import SideMenu from "./SideMenu";
 import EmailModal from "./EmailModal";
+import {
+	setUserStatusToOnline,
+	setUserStatusToOffline,
+	changeContactStatusToOffline,
+	changeContactStatusToOnline,
+} from "../../store/auth";
 
 class Chat extends Component {
 	componentDidMount = () => {
+		// this.props.setUserStatusToOnline();
 		this.props.getChats();
 
 		echo.channel("newChat").listen("NewChat", res => {
@@ -68,6 +75,12 @@ const mapStateToProps = state => ({
 	showSideMenu: state.layout.sideMenu.isVisible,
 });
 
-export default connect(mapStateToProps, { getChats, addMessage, addChat })(
-	Chat
-);
+export default connect(mapStateToProps, {
+	getChats,
+	addMessage,
+	addChat,
+	setUserStatusToOffline,
+	setUserStatusToOnline,
+	changeContactStatusToOffline,
+	changeContactStatusToOnline,
+})(Chat);

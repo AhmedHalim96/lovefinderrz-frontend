@@ -1,6 +1,12 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectChat, addMessage } from "../../store/chat";
+import {
+	changeContactStatusToOffline,
+	changeContactStatusToOnline,
+	// setUserStatusToOffline,
+	// setUserStatusToOnline,
+} from "../../store/auth";
 import moment from "moment";
 import { changeSmallScreenLayout } from "../../store/layout";
 import echo from "../../laravelEcho";
@@ -37,10 +43,39 @@ function SidebarItem({ chat }) {
 	let selected = selectedChatId === id;
 
 	useEffect(() => {
+		// New Messages
 		echo.channel("chat_" + chat.id).listen("NewMessage", res => {
 			dispatch(addMessage(res.message, res.messageSender));
 		});
-	}, [chat.id, dispatch]);
+
+		// Status
+		echo
+			.join("chat." + chat.id + ".status")
+			.here(contacts => {
+				console.log("here.....");
+				if (contacts.length > 1) {
+					dispatch(changeContactStatusToOnline(selecteduser));
+				} else {
+					dispatch(changeContactStatusToOffline(selecteduser));
+				}
+			})
+			.joining(contact => {
+				dispatch(changeContactStatusToOnline(contact));
+				console.log("Joinning");
+			})
+			.leaving(contact => {
+				dispatch(changeContactStatusToOffline(contact));
+				console.log("leaving");
+			});
+		// .listen("UserOnline", e => {
+		// 	// changeContactStatusToOnline(e.user);
+		// 	// console.log("UserOnline:", e);
+		// })
+		// .listen("UserOffline", e => {
+		// 	// changeContactStatusToOffline(e.user);
+		// 	console.log("UserOffline:", e);
+		// });
+	}, [chat.id, dispatch, selecteduser]);
 
 	return (
 		<div

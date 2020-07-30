@@ -14,6 +14,12 @@ function ChatTopBar({ subTitle }) {
 		state => state.chat.selectedChat.users
 	).filter(user => user.id !== currentUserId)[0];
 	const chatTitle = chattedUser.name;
+	const contacts = useSelector(state => state.auth.user.contacts);
+	let status;
+	if (contacts.length) {
+		status = contacts.filter(contact => contact.id === chattedUser.id)[0]
+			.status;
+	}
 	return (
 		<div className="chat__topbar">
 			<div className="chat__topbar_left">
@@ -33,7 +39,7 @@ function ChatTopBar({ subTitle }) {
 				</button>
 				<div className="chat__topbar_title">
 					<h2
-						className="chat__topbar_title-main"
+						className="chat__topbar_title_user"
 						onClick={e => {
 							dispatch(viewProfile(chattedUser));
 							dispatch(toggleProfileModal());
@@ -41,7 +47,15 @@ function ChatTopBar({ subTitle }) {
 					>
 						{chatTitle}
 					</h2>
-					<span className="chat__topbar_title-sub">{subTitle}</span>
+					<span
+						className={`chat__topbar_title_status ${
+							status === "online"
+								? "chat__topbar_title_status-online"
+								: "chat__topbar_title_status-offline"
+						}`}
+					>
+						<i className="fa fa-circle"></i> {status}
+					</span>
 				</div>
 			</div>
 			<div className="chat__topbar_right">

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { createSlice, createAction } from "@reduxjs/toolkit";
 import { apiRequestStarted } from "./api";
-import { loginConfig, registerConfig } from "./apiConfig";
+import { loginConfig, registerConfig, userStatusConfig } from "./apiConfig";
 
 // Auth Slice
 const authSlice = createSlice({
@@ -77,6 +77,24 @@ const authSlice = createSlice({
 			state.authenticated = false;
 			state.token = null;
 		},
+		userOnline: (state, action) => {
+			state.user.status = "online";
+		},
+		userOffline: (state, action) => {
+			state.user.status = "offline";
+		},
+		contactIsOnline: (state, action) => {
+			const contactIndex = state.user.contacts.findIndex(
+				contact => contact.id === action.payload.contact.id
+			);
+			state.user.contacts[contactIndex].status = "online";
+		},
+		contactIsOffline: (state, action) => {
+			const contactIndex = state.user.contacts.findIndex(
+				contact => contact.id === action.payload.contact.id
+			);
+			state.user.contacts[contactIndex].status = "offline";
+		},
 	},
 });
 
@@ -93,6 +111,10 @@ const {
 	fetchingStoredUserSuccess,
 	fetchingStoredUserFailed,
 	userLoggedOut,
+	userOffline,
+	userOnline,
+	contactIsOnline,
+	contactIsOffline,
 } = authSlice.actions;
 
 // Action Creators
@@ -167,5 +189,46 @@ export const logOutUser = () => (dispatch, getState) => {
 	localStorage.removeItem("token");
 	dispatch({
 		type: userLoggedOut.type,
+	});
+};
+
+export const setUserStatusToOnline = () => (dispatch, getState) => {
+	console.log("TEST");
+	dispatch(
+		apiRequestStarted({
+			url: userStatusConfig.url + "/online",
+			method: userStatusConfig.method,
+			onSuccess: userOnline.type,
+			requireToken: true,
+		})
+	);
+};
+
+export const setUserStatusToOffline = () => (dispatch, getState) => {
+	dispatch(
+		apiRequestStarted({
+			url: userStatusConfig.url + "/offline",
+			method: userStatusConfig.method,
+			onSuccess: userOnline.type,
+			requireToken: true,
+		})
+	);
+};
+
+export const changeContactStatusToOnline = contact => (dispatch, getState) => {
+	dispatch({
+		type: contactIsOnline.type,
+		payload: {
+			contact,
+		},
+	});
+};
+
+export const changeContactStatusToOffline = contact => (dispatch, getState) => {
+	dispatch({
+		type: contactIsOffline.type,
+		payload: {
+			contact,
+		},
 	});
 };

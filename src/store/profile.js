@@ -59,11 +59,3 @@ export const viewProfileByEmail = email => async (dispatch, getState) => {
 		})
 	);
 };
-
-// Selectors
-export const getContacts = createSelector(
-	state => state.chat.chats,
-	state => state.auth.user.id,
-	(chats, currentUserId) =>
-		chats.map(chat => chat.users.filter(user => user.id !== currentUserId)[0])
-);
