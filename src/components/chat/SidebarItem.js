@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { produce } from "immer";
 import { selectChat, addMessage } from "../../store/chat";
 import {
 	changeContactStatusToOffline,
@@ -19,8 +20,18 @@ function SidebarItem({ chat }) {
 	const selectedChatId = useSelector(state => state.chat.selectedChat.id);
 	let { id, messages } = chat;
 	let lastMessage = messages[0];
+	console.log("Debug 1:", lastMessage);
 	let lastMessageTime;
 	if (messages.length) {
+		lastMessage = produce(lastMessage, message => {
+			if (message.body.length > 20) {
+				message.body = message.body.substr(0, 20) + "....";
+			}
+		});
+		console.log("Debug 2:", lastMessage);
+		lastMessage = produce(lastMessage, message => {});
+		console.log("Debug 3:", lastMessage);
+
 		const lastMessageMoment = moment(lastMessage.created_at);
 		if (moment().day() !== lastMessageMoment.day()) {
 			lastMessageTime = `${
@@ -41,6 +52,7 @@ function SidebarItem({ chat }) {
 	let name = selecteduser.name;
 	let avatar = selecteduser.avatar;
 	let selected = selectedChatId === id;
+	const [isTyping, setIsTyping] = useState({});
 
 	useEffect(() => {
 		echo
@@ -64,6 +76,11 @@ function SidebarItem({ chat }) {
 			.listen("NewMessage", res => {
 				dispatch(addMessage(res.message, res.messageSender));
 			});
+		echo.private("chat." + chat.id).listenForWhisper("typing", e => {
+			setIsTyping(e.user);
+			// remove is typing indicator after 0.9s
+			setTimeout(() => setIsTyping({}), 900);
+		});
 	}, [chat.id, dispatch, selecteduser]);
 
 	return (
@@ -93,11 +110,11 @@ function SidebarItem({ chat }) {
 				</div>
 				<div className="chat__sidebarItem_bottom">
 					<p className="chat__sidebarItem_message">
-						{messages.length
-							? `${
-									currentUserId === lastMessage.user.id ? "You: " : ""
-							  } ${lastMessage.body.substr(0, 20)} ${
-									lastMessage.body.length > 20 ? "..." : ""
+						{isTyping.id
+							? isTyping.name + " is typing..."
+							: messages.length
+							? `${currentUserId === lastMessage.user.id ? "You: " : ""} ${
+									lastMessage.body
 							  }`
 							: "No Messages"}
 					</p>
