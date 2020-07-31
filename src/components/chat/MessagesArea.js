@@ -7,32 +7,36 @@ function MessagesArea() {
 	const currentUserId = useSelector(state => state.auth.user.id);
 	const messages = useSelector(state => state.chat.selectedChat.messages);
 	let messagesReversed = [...messages].reverse();
-	return (
-		<ScrollToBottom
-			className="chat__messages"
-			followButtonClassName="chat__messages_scroll-btn"
-		>
-			{messagesReversed.map((message, index) => {
-				const { id, avatar, name } = message.user;
-				let isLastMessageBySameUser = false;
-				if (index === messagesReversed.length - 1)
-					isLastMessageBySameUser = true;
-				else
-					isLastMessageBySameUser = id !== messagesReversed[index + 1].user.id;
 
-				return (
-					<Message
-						key={message.id}
-						senderAvatar={avatar}
-						senderName={name}
-						messageText={message.body}
-						sentTime={message.created_at}
-						byCurrentUser={currentUserId === id}
-						isLastMessageBySameUser={isLastMessageBySameUser}
-					/>
-				);
-			})}
-		</ScrollToBottom>
+	return (
+		<React.Fragment>
+			<ScrollToBottom
+				className="chat__messages"
+				followButtonClassName="chat__messages_scroll-btn"
+			>
+				{messagesReversed.map((message, index) => {
+					const { id, avatar, name } = message.user;
+					let isLastMessageBySameUser = false;
+					if (index === messagesReversed.length - 1)
+						isLastMessageBySameUser = true;
+					else
+						isLastMessageBySameUser =
+							id !== messagesReversed[index + 1].user.id;
+
+					return (
+						<Message
+							key={message.id}
+							senderAvatar={avatar}
+							senderName={name}
+							messageText={message.body}
+							sentTime={message.created_at}
+							byCurrentUser={currentUserId === id}
+							isLastMessageBySameUser={isLastMessageBySameUser}
+						/>
+					);
+				})}
+			</ScrollToBottom>
+		</React.Fragment>
 	);
 }
 

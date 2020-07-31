@@ -415,4 +415,9 @@
 			align-self: end;
 		}
 	}
+	&__isTyping {
+		margin-left: 2rem;
+		color: darken($color: $color-white, $amount: 10);
+		font-size: 1.1rem;
+	}
 }

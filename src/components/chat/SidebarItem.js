@@ -43,14 +43,8 @@ function SidebarItem({ chat }) {
 	let selected = selectedChatId === id;
 
 	useEffect(() => {
-		// New Messages
-		echo.channel("chat_" + chat.id).listen("NewMessage", res => {
-			dispatch(addMessage(res.message, res.messageSender));
-		});
-
-		// Status
 		echo
-			.join("chat." + chat.id + ".status")
+			.join("chat." + chat.id)
 			.here(contacts => {
 				console.log("here.....");
 				if (contacts.length > 1) {
@@ -66,15 +60,10 @@ function SidebarItem({ chat }) {
 			.leaving(contact => {
 				dispatch(changeContactStatusToOffline(contact));
 				console.log("leaving");
+			})
+			.listen("NewMessage", res => {
+				dispatch(addMessage(res.message, res.messageSender));
 			});
-		// .listen("UserOnline", e => {
-		// 	// changeContactStatusToOnline(e.user);
-		// 	// console.log("UserOnline:", e);
-		// })
-		// .listen("UserOffline", e => {
-		// 	// changeContactStatusToOffline(e.user);
-		// 	console.log("UserOffline:", e);
-		// });
 	}, [chat.id, dispatch, selecteduser]);
 
 	return (
