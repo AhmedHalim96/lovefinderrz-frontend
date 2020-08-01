@@ -13,18 +13,22 @@ import EmailModal from "./EmailModal";
 import {
 	setUserStatusToOnline,
 	setUserStatusToOffline,
-	changeContactStatusToOffline,
-	changeContactStatusToOnline,
+	addToContacts,
 } from "../../store/auth";
 
 class Chat extends Component {
 	componentDidMount = () => {
 		// this.props.setUserStatusToOnline();
 		this.props.getChats();
-
-		echo.channel("newChat").listen("NewChat", res => {
-			this.props.addChat(res.new_chat);
-		});
+		echo
+			.private("newChat." + this.props.currentUserId)
+			.listen("NewChat", res => {
+				this.props.addChat(res.new_chat);
+				const contact = res.new_chat.users.filter(
+					user => user.id !== this.props.currentUserId
+				)[0];
+				this.props.addToContacts(contact);
+			});
 	};
 
 	render() {
@@ -66,6 +70,7 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
 	loading: state.chat.loading,
+	currentUserId: state.auth.user.id,
 	chats: state.chat.chats,
 	loaded: state.chat.loaded,
 	selectedChat: state.chat.selectedChat,
@@ -81,6 +86,5 @@ export default connect(mapStateToProps, {
 	addChat,
 	setUserStatusToOffline,
 	setUserStatusToOnline,
-	changeContactStatusToOffline,
-	changeContactStatusToOnline,
+	addToContacts,
 })(Chat);

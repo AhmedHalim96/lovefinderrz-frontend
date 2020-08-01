@@ -3,7 +3,6 @@ import Backdrop from "../layout/Backdrop";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleProfileModal } from "../../store/layout";
 import Spinner from "../layout/Spinner";
-import { getContacts } from "../../store/profile";
 import { startChat } from "../../store/chat";
 import CircularAvatar from "../layout/CircularAvatar";
 

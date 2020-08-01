@@ -5,6 +5,7 @@ import {
 	sendMessageConfig,
 	createChatConfig,
 } from "./apiConfig";
+import { contactAdded } from "./auth";
 
 // chat Slice
 const chatSlice = createSlice({
@@ -168,6 +169,7 @@ export const startChat = (user_id, message) => async (dispatch, getState) => {
 			data: { user_id, message },
 			onStart: creatingChatRequested.type,
 			onSuccess: chatCreated.type,
+			afterSuccess: contactAdded.type,
 			onError: creatingChatFailed.type,
 			requireToken: true,
 		})

@@ -95,6 +95,19 @@ const authSlice = createSlice({
 			);
 			state.user.contacts[contactIndex].status = "offline";
 		},
+		contactAdded: (state, action) => {
+			let contact;
+			if (action.payload.contact) contact = action.payload.contact;
+			else {
+				contact = action.payload.users.filter(
+					user => user.id !== state.user.id
+				)[0];
+			}
+			state.user.contacts.push(contact);
+
+			// Store in localStorage
+			localStorage.setItem("user", JSON.stringify(state.user));
+		},
 	},
 });
 
@@ -116,6 +129,8 @@ const {
 	contactIsOnline,
 	contactIsOffline,
 } = authSlice.actions;
+
+export const { contactAdded } = authSlice.actions;
 
 // Action Creators
 
@@ -227,6 +242,15 @@ export const changeContactStatusToOnline = contact => (dispatch, getState) => {
 export const changeContactStatusToOffline = contact => (dispatch, getState) => {
 	dispatch({
 		type: contactIsOffline.type,
+		payload: {
+			contact,
+		},
+	});
+};
+
+export const addToContacts = contact => async (dispatch, getState) => {
+	await dispatch({
+		type: contactAdded.type,
 		payload: {
 			contact,
 		},
