@@ -150,13 +150,12 @@ export const sendMessage = ({ body, chat_id }) => (dispatch, getState) => {
 	);
 };
 
-export const addMessage = (message, messageSender) => (dispatch, getState) => {
-	const newMessage = { ...message, user: messageSender };
+export const addMessage = message => (dispatch, getState) => {
 	dispatch({
 		type: messageAdded.type,
 		payload: {
 			chatId: message.chat_id,
-			message: newMessage,
+			message,
 		},
 	});
 };

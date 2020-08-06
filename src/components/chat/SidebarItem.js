@@ -74,7 +74,7 @@ function SidebarItem({ chat }) {
 				console.log("leaving");
 			})
 			.listen("NewMessage", res => {
-				dispatch(addMessage(res.message, res.messageSender));
+				dispatch(addMessage(res.message));
 			});
 		echo.private("chat." + chat.id).listenForWhisper("typing", e => {
 			setIsTyping(e.user);
